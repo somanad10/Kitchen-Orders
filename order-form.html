@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aruna's Kitchen - Weekly Order Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            /* Warm Amber Color Scheme - NOT brown! */
+            --primary: #d97706;
+            --primary-light: #f59e0b;
+            --primary-dark: #b45309;
+            --accent: #fcd34d;
+            --accent-light: #fde68a;
+            
+            --bg-cream: #fef3c7;
+            --bg-white: #ffffff;
+            --bg-warm: #fffbeb;
+            
+            --text-dark: #92400e;
+            --text-medium: #b45309;
+            --text-muted: #d97706;
+            
+            --border-light: #fde68a;
+            --border-warm: #fcd34d;
+            
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --warning: #ea580c;
+            --warning-bg: #ffedd5;
+            --error: #dc2626;
+            --error-bg: #fee2e2;
+        }
+        
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--bg-white), var(--bg-warm));
+            text-align: center;
+            padding: 1.5rem 1rem;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .logo-container {
+            margin-bottom: 1rem;
+        }
+        
+        #logo {
+            max-width: 400px;
+            width: 90%;
+            height: auto;
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(217, 119, 6, 0.1);
+        }
+        
+        .phone-number {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .week-header {
+            margin-top: 0.75rem;
+        }
+        
+        .week-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        
+        .cutoff-banner {
+            background: var(--warning-bg);
+            color: var(--warning);
+            padding: 0.5rem 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--primary-light);
+        }
+        
+        .cutoff-banner strong {
+            color: var(--primary-dark);
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .section-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.08);
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-light);
+        }
+        
+        .menu-day {
+            margin-bottom: 1rem;
+        }
+        
+        .menu-day:last-child {
+            margin-bottom: 0;
+        }
+        
+        .menu-day-header {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .menu-day-header.disabled {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+        
+        .menu-day-header .day-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.15rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .menu-day-header.disabled .day-badge {
+            background: #bdbdbd;
+        }
+        
+        .menu-items-list {
+            background: var(--bg-warm);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .menu-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .menu-item-row:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-item-name {
+            flex: 1;
+            color: var(--text-medium);
+        }
+        
+        .menu-item-price {
+            color: var(--primary);
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-warm);
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-size: 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .radio-option input {
+            display: none;
+        }
+        
+        .radio-option label {
+            display: block;
+            padding: 0.75rem;
+            background: var(--bg-warm);
+            border: 2px solid var(--border-warm);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+        }
+        
+        .radio-option input:checked + label {
+            border-color: var(--primary);
+            background: rgba(217, 119, 6, 0.08);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .radio-option label:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+        
+        .delivery-address-container {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .delivery-address-container.show {
+            display: block;
+        }
+        
+        .delivery-note {
+            font-size: 0.8rem;
+            color: var(--warning);
+            margin-top: 0.4rem;
+            font-style: italic;
+        }
+        
+        .day-order-section {
+            background: var(--bg-warm);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+        }
+        
+        .day-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .day-order-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .remove-day-btn {
+            background: transparent;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 1.2rem;
+        }
+        
+        .day-select {
+            width: 100%;
+            padding: 0.6rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-warm);
+            border-radius: 6px;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .day-select option:disabled {
+            color: #bdbdbd;
+        }
+        
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .item-select {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-warm);
+            border-radius: 6px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        
+        .size-select {
+            width: 100px;
+            padding: 0.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-warm);
+            border-radius: 6px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        
+        .qty-input {
+            width: 80px;
+            padding: 0.5rem;
+            background: var(--bg-white);
+            border: 1px solid var(--border-warm);
+            border-radius: 6px;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .remove-item-btn {
+            background: transparent;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .add-item-btn {
+            background: transparent;
+            border: 1px dashed var(--border-warm);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .add-item-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(217, 119, 6, 0.05);
+        }
+        
+        .add-day-btn {
+            background: var(--bg-white);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        
+        .add-day-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .summary-content {
+            background: var(--bg-warm);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-medium);
+        }
+        
+        .summary-line:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0 0;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .message.error {
+            background: var(--error-bg);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+        
+        .message.success {
+            background: var(--success-bg);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .confirmation-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+        
+        .confirmation-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .confirmation-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+        
+        .order-id {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .receipt {
+            background: var(--bg-warm);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+            color: var(--text-medium);
+        }
+        
+        .new-order-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-light);
+            margin-top: 1rem;
+            background: var(--bg-white);
+        }
+        
+        @media (max-width: 480px) {
+            .hero { padding: 1.25rem 1rem; }
+            .logo-text { font-size: 1.8rem; }
+            .container { padding: 0.75rem; }
+            .section-card { padding: 1rem; }
+            .radio-option { min-width: 100px; }
+            .item-row { flex-direction: column; align-items: stretch; }
+            .item-select { min-width: 100%; }
+            .size-select, .qty-input { flex: 1; }
+        }
+    
+        /* ===================================
+           Day tabs: readable text when selected
+           =================================== */
+        .day-tab-btn .day-tab-day { 
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .day-tab-btn .day-tab-date {
+            color: var(--text-medium);
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+        .day-tab-btn .day-tab-status {
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+        .day-tab-btn.available {
+            background: var(--bg-white);
+            border-color: var(--border-warm);
+            color: var(--text-dark);
+        }
+        .day-tab-btn.unavailable {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+        .day-tab-btn.selected {
+            background: var(--primary) !important;
+            border-color: var(--primary-dark) !important;
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        .day-tab-btn.selected .day-tab-day { color: #ffffff; }
+        .day-tab-btn.selected .day-tab-date { color: var(--accent-light); }
+        .day-tab-btn.selected .day-tab-status { color: #ffffff; opacity: 0.95; }
+
+    
+        /* Inline field validation (red border + message under field) */
+        .field-error {
+            border: 2px solid var(--error) !important;
+        }
+        .field-error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+    
+</style>
+</head>
+<body>
+    <header class="hero">
+        <div class="logo-container">
+            <!-- Logo will appear here if logo.png exists in repo -->
+            <img src="logo.png" id="logo" alt="Aruna's Kitchen" style="display: none;" onerror="this.style.display='none';" onload="this.style.display='block'; document.querySelector('.logo-text').style.display='none';">
+            <div class="logo-text">Aruna's Kitchen</div>
+            <div class="phone-number">📞 +1 248-877-9924</div>
+        </div>
+        <div class="week-header">
+            <div class="week-label" id="weekLabel">Loading menu...</div>
+        </div>
+    </header>
+    
+    <div class="cutoff-banner" id="cutoffBanner">
+        <strong>🍽️</strong> <span id="cutoffMessage">To maintain the flavors and quality of our food, we kindly request that you place orders by 8 PM CST for the next day.</span>
+    </div>
+    
+    <main class="container">
+        <div id="errorMessage" class="message error hidden"></div>
+        <div id="successMessage" class="message success hidden"></div>
+        
+        <div id="loadingIndicator" class="loading">
+            <div class="spinner"></div>
+            <p>Loading menu...</p>
+        </div>
+        
+        <div id="formContainer" class="hidden">
+
+            <section class="section-card">
+                <h2 class="section-title">This Week's Menu</h2>
+                <div id="menuDisplay"></div>
+            </section>
+            
+            
+
+            
+            <section class="section-card">
+                <h2 class="section-title">Your Order</h2>
+                <div id="daysContainer"></div>
+                <button type="button" class="add-day-btn" id="addDayBtn">+ Add Another Day</button>
+            </section>
+            
+            
+
+            
+            <section class="section-card">
+                <h2 class="section-title">Your Information</h2>
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label class="form-label">Name *</label>
+                        <input type="text" id="customerName" class="form-input" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" id="customerPhone" class="form-input" placeholder="(555) 123-4567" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email (Optional - for order receipt)</label>
+                        <input type="email" id="customerEmail" class="form-input" placeholder="your.email@example.com">
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; font-style: italic;">
+                            💌 If provided, we'll send you an order confirmation
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Fulfillment Method *</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" name="fulfillment" id="fulfillmentPickup" value="Pickup" checked>
+                                <label for="fulfillmentPickup">Pickup</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" name="fulfillment" id="fulfillmentDelivery" value="Delivery">
+                                <label for="fulfillmentDelivery">Delivery ($2/day)</label>
+                            </div>
+                        </div>
+                        <div class="delivery-note" id="wednesdayDeliveryNote" style="margin-top: 0.5rem;">
+                            ⚠️ <strong>Note:</strong> Delivery is <strong>not available on Wednesday</strong> this week. Wednesday orders must be <strong>Pickup</strong>.
+                        </div>
+
+                    </div>
+                    
+                    <div class="delivery-address-container" id="deliveryAddressContainer">
+                        <div class="form-group">
+                            <label class="form-label">Delivery Address *</label>
+                            <input type="text" id="deliveryAddress" class="form-input" placeholder="123 Main St, City, State ZIP">
+                            <div class="delivery-note">$2 delivery fee per day selected</div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            
+            
+
+            
+            <section class="section-card">
+                <h2 class="section-title">Order Summary</h2>
+                <div class="summary-content" id="summaryContent">
+                    <p style="text-align: center; color: var(--text-muted);">Add items to see your order summary</p>
+                </div>
+            </section>
+            
+            
+
+<button type="submit" class="submit-btn" id="submitBtn">Place Order</button>
+        </div>
+        
+        <div id="confirmationContainer" class="hidden">
+            <!-- Confirmation will appear here -->
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>🍽️ Freshly cooked • Homestyle flavors</p>
+        <p style="margin-top: 0.5rem;">Aruna's Kitchen 2026</p>
+        
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: #999; line-height: 1.6;">
+            <p><strong>Disclaimer:</strong></p>
+            <p style="margin-top: 0.5rem;">
+                • All orders are subject to availability and must be placed by 8 PM CST for next-day fulfillment.<br>
+                • Prices and menu items may change without notice.<br>
+                • Delivery times are estimates and may vary based on location and order volume.<br>
+                • Please inform us of any food allergies or dietary restrictions when placing your order.<br>
+                • We reserve the right to cancel or modify orders in case of unforeseen circumstances.<br>
+                • Payment terms and cancellation policies apply. Please contact us for details.<br>
+                • By placing an order, you agree to our terms of service and privacy policy.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // ===================================
+        // CONFIGURATION
+        // ===================================
+        const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'; // REPLACE WITH YOUR URL
+        const DELIVERY_FEE_PER_DAY = 2.00;
+        const ORDER_CUTOFF_HOUR = 20; // 8 PM
+        const TIMEZONE = 'America/Chicago'; // CST/CDT
+        
+        // ===================================
+        // GLOBAL STATE
+        // ===================================
+        let menuData = [];
+        let activeWeek = '';
+        let dayCounter = 0;
+        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+
+        // ===================================
+        // TIMEZONE HELPERS (CST)
+        // ===================================
+        function getCSTParts() {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: TIMEZONE,
+                weekday: 'short',
+                hour: '2-digit',
+                hour12: false
+            }).formatToParts(new Date());
+
+            const lookup = {};
+            parts.forEach(p => lookup[p.type] = p.value);
+
+            const hour = parseInt(lookup.hour, 10);
+            const wd = lookup.weekday; // Sun, Mon, Tue...
+            const map = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+            const jsDay = map[wd];
+
+            return { hour, jsDay };
+        }
+
+        function isPastCutoffCST() {
+            const { hour } = getCSTParts();
+            return hour >= ORDER_CUTOFF_HOUR;
+        }
+
+        
+        // ===================================
+        // INITIALIZATION
+        // ===================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Initializing order form...');
+            
+            // Check if deadline has passed
+            checkOrderDeadline();
+            
+            await loadMenu();
+            addDay();
+            setupEventListeners();
+        });
+        
+        // ===================================
+        // CHECK ORDER DEADLINE
+        // ===================================
+        function checkOrderDeadline() {
+            const cutoffMessage = document.getElementById('cutoffMessage');
+            const cutoffBanner = document.getElementById('cutoffBanner');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // After 8 PM CST: do not allow ordering
+            if (isPastCutoffCST()) {
+                cutoffMessage.innerHTML = '⏰ Ordering is closed after <strong>8 PM CST</strong>. Please come back next week. Thank you!';
+                cutoffBanner.style.background = '#fee2e2';
+                cutoffBanner.style.color = '#991b1b';
+                cutoffBanner.style.borderBottom = '2px solid #dc2626';
+                if (submitBtn) submitBtn.disabled = true;
+
+                // Disable day selections and add-day button
+                setTimeout(() => {
+                    document.querySelectorAll('.day-select, .item-select, .size-select, .qty-input').forEach(el => el.disabled = true);
+                    const addDayBtn = document.getElementById('addDayBtn');
+                    if (addDayBtn) addDayBtn.disabled = true;
+                }, 0);
+                return;
+            }
+
+            // Normal message before cutoff
+            cutoffMessage.innerHTML = '🍽️ To maintain the flavors and quality of our food, we kindly request that you place orders by <strong>8 PM CST</strong> for the next day.';
+        }
+        
+        // ===================================
+        // MENU LOADING
+        // ===================================
+        async function loadMenu() {
+            showLoading(true);
+            try {
+                console.log('Fetching menu from:', SCRIPT_URL);
+                const response = await fetch(`${SCRIPT_URL}?action=getMenu`);
+                const data = await response.json();
+                
+                console.log('Menu response:', data);
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                menuData = data.menu || [];
+                activeWeek = data.weekLabel || 'This Week';
+                
+                console.log(`Menu loaded: ${menuData.length} items`);
+                console.log('Sample item:', menuData[0]);
+                
+                document.getElementById('weekLabel').textContent = activeWeek;
+                displayMenu();
+                showLoading(false);
+                document.getElementById('formContainer').classList.remove('hidden');
+            } catch (error) {
+                console.error('Menu load error:', error);
+                showError('Failed to load menu. Please check your SCRIPT_URL configuration.');
+                showLoading(false);
+            }
+        }
+        
+        function displayMenu() {
+            const menuDisplay = document.getElementById('menuDisplay');
+            
+            // Group menu by day
+            const menuByDay = {};
+            menuData.forEach(item => {
+                const day = item.DayOfWeek || item.day;
+                if (!day) {
+                    console.warn('Item missing day:', item);
+                    return;
+                }
+                
+                if (!menuByDay[day]) {
+                    menuByDay[day] = {};
+                }
+                
+                const itemName = item.ItemName || item.item;
+                if (!menuByDay[day][itemName]) {
+                    menuByDay[day][itemName] = [];
+                }
+                
+                menuByDay[day][itemName].push(item);
+            });
+            
+            console.log('Menu grouped by day:', menuByDay);
+            
+            menuDisplay.innerHTML = '';
+            
+            // Create day tabs with dates
+            const dayTabs = document.createElement('div');
+            dayTabs.className = 'menu-day-tabs';
+            dayTabs.style.cssText = 'display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-warm); padding-bottom: 0.5rem;';
+            
+            // Get dates for each day
+            const dayDates = {};
+            daysOfWeek.forEach(day => {
+                dayDates[day] = getDateForDayOfWeek(day);
+            });
+            
+            let firstDaySet = false;
+            
+            daysOfWeek.forEach((day, index) => {
+                if (menuByDay[day]) {
+                    const tabBtn = document.createElement('button');
+                    tabBtn.className = 'day-tab-btn';
+                    tabBtn.setAttribute('data-day', day);
+                    
+                    const isOrderable = isDayAvailableForOrdering(day);
+
+                    tabBtn.classList.add('day-tab-btn', isOrderable ? 'available' : 'unavailable');
+                    
+                    tabBtn.innerHTML = `
+                        <div class="day-tab-day">${day}</div>
+                        <div class="day-tab-date">${dayDates[day]}</div>
+                        ${!isOrderable ? (day === "Sunday" ? '<div class="day-tab-status">View Only</div>' : '<div class="day-tab-status">Not Available</div>') : ''}
+                    `;
+                    
+                    tabBtn.style.cssText = `
+                        flex: 1;
+                        min-width: 100px;
+                        padding: 0.75rem 0.5rem;
+                        border: 2px solid;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                        text-align: center;
+                    `;
+                    
+                    tabBtn.addEventListener('click', () => {
+                        // Clear previous selection and reset availability styling
+                        document.querySelectorAll('.day-tab-btn').forEach(btn => {
+                            btn.classList.remove('selected');
+                            const btnDay = btn.getAttribute('data-day');
+                            const available = isDayAvailableForOrdering(btnDay);
+                            btn.classList.toggle('available', available);
+                            btn.classList.toggle('unavailable', !available);
+                        });
+
+                        // Mark this tab selected (keeps text visible via CSS)
+                        tabBtn.classList.add('selected');
+
+                        // Show this day's menu
+                        showDayMenu(day, menuByDay[day], isOrderable, dayDates[day]);
+                    });
+                    
+                    dayTabs.appendChild(tabBtn);
+                    
+                    // Auto-select first available day or first day
+                    if (!firstDaySet) {
+                        firstDaySet = true;
+                        setTimeout(() => tabBtn.click(), 100);
+                    }
+                }
+            });
+            
+            menuDisplay.appendChild(dayTabs);
+            
+            // Create menu content container
+            const menuContent = document.createElement('div');
+            menuContent.id = 'menuContent';
+            menuDisplay.appendChild(menuContent);
+            
+            if (Object.keys(menuByDay).length === 0) {
+                menuDisplay.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">No menu items available. Please check your menu data in Google Sheets.</p>';
+            }
+        }
+        
+        function showDayMenu(day, dayMenu, isAvailable, dayDate) {
+            const menuContent = document.getElementById('menuContent');
+            
+            menuContent.innerHTML = `
+                <div style="background: var(--bg-warm); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+                    <h3 style="color: var(--primary); margin: 0 0 0.5rem 0; font-size: 1.2rem;">${day}'s Menu</h3>
+                    <p style="color: var(--text-medium); margin: 0; font-size: 0.9rem;">${day}, ${dayDate}</p>
+                    ${!isAvailable ? `<p style="color: #dc2626; margin: 0.5rem 0 0 0; font-size: 0.85rem; font-weight: 600;">⚠️ ${day === 'Sunday' ? 'Sunday menu is view-only online. Please call for Sunday orders.' : 'Ordering is not available for this day.'}</p>` : ''}
+                </div>
+                <div class="menu-items-list" style="background: var(--bg-white); border-radius: 6px; padding: 0.75rem;">
+                    ${Object.keys(dayMenu).map(itemName => {
+                        const sizes = dayMenu[itemName];
+                        return sizes.map(item => `
+                            <div class="menu-item-row" style="display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border-light);">
+                                <span class="menu-item-name" style="flex: 1; color: var(--text-medium); font-weight: 500;">${item.ItemName || item.item} <span style="color: var(--text-muted); font-size: 0.85rem;">(${item.Size || item.size})</span></span>
+                                <span class="menu-item-price" style="color: var(--primary); font-weight: 600; margin-left: 1rem;">$${(item.Price || item.price).toFixed(2)}</span>
+                            </div>
+                        `).join('');
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        function getDateForDayOfWeek(dayName) {
+            const dayIndexMap = {
+                'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3,
+                'Friday': 4, 'Saturday': 5, 'Sunday': 6
+            };
+
+            const today = new Date();
+            const jsDow = today.getDay(); // 0=Sun ... 6=Sat
+
+            // Requirement: Every Sunday at 12:00 AM, switch to NEXT week's menu.
+            // So on Sunday, treat "active Monday" as tomorrow; otherwise, this week's Monday.
+            const activeMonday = new Date(today);
+            if (jsDow === 0) {
+                activeMonday.setDate(today.getDate() + 1);
+            } else {
+                activeMonday.setDate(today.getDate() - (jsDow - 1));
+            }
+            activeMonday.setHours(0,0,0,0);
+
+            const targetDate = new Date(activeMonday);
+            targetDate.setDate(activeMonday.getDate() + (dayIndexMap[dayName] ?? 0));
+
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${monthNames[targetDate.getMonth()]} ${targetDate.getDate()}`;
+        }
+        
+        // ===================================
+        // DAY AVAILABILITY
+        // ===================================
+        
+        // Convert JavaScript's Sunday-first (0-6) to Monday-first (0-6) indexing
+        // Monday=0, Tuesday=1, ..., Sunday=6
+        function getMondayBasedIndex(jsDayIndex) {
+            return jsDayIndex === 0 ? 6 : jsDayIndex - 1;
+        }
+        
+        function isDayAvailableForOrdering(dayName) {
+            // Rule: No Sunday ordering this week (menu not finalized)
+            if (dayName === 'Sunday') return false;
+
+            // Rule: No ordering after 8 PM CST
+            if (isPastCutoffCST()) return false;
+
+            const { jsDay } = getCSTParts(); // 0=Sun ... 6=Sat (CST)
+            const currentDay = (jsDay === 0) ? -1 : getMondayBasedIndex(jsDay); // treat Sunday as -1 (so Monday is next)
+
+            const dayIndexMap = {
+                'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3,
+                'Friday': 4, 'Saturday': 5, 'Sunday': 6
+            };
+            const targetDay = dayIndexMap[dayName];
+
+            // Past days blocked
+            if (targetDay < currentDay) return false;
+
+            // No same-day ordering
+            if (targetDay === currentDay) return false;
+
+            // Before 8 PM CST: allow tomorrow+ only
+            const daysUntil = targetDay - currentDay;
+            return daysUntil >= 1;
+        }
+            
+            // RULE 2: Cannot order for today
+            if (targetDay === currentDay) {
+                console.log(`  ❌ ${dayName} is TODAY`);
+                return false;
+            }
+            
+            // RULE 3: Future days - check cutoff time
+            const daysUntil = targetDay - currentDay;
+            
+            // After 8 PM: Need 2+ days advance
+            if (currentHour >= ORDER_CUTOFF_HOUR) {
+                if (daysUntil >= 2) {
+                    console.log(`  ✅ ${dayName} available (${daysUntil} days away, after 8 PM)`);
+                    return true;
+                } else {
+                    console.log(`  ❌ ${dayName} too close (${daysUntil} days, need 2+ after 8 PM)`);
+                    return false;
+                }
+            }
+            
+            // Before 8 PM: Need 1+ days advance (tomorrow onwards)
+            if (daysUntil >= 1) {
+                console.log(`  ✅ ${dayName} available (${daysUntil} days away, before 8 PM)`);
+                return true;
+            }
+            
+            console.log(`  ❌ ${dayName} not available`);
+            return false;
+        }
+        
+        function getAvailableDays() {
+            const now = new Date();
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            console.log('=== Checking available days ===');
+            console.log(`Today: ${dayNames[now.getDay()]} at ${now.getHours()}:00`);
+            
+            const available = daysOfWeek.filter(day => isDayAvailableForOrdering(day));
+            console.log(`Available: ${available.join(', ') || 'None'}`);
+            console.log('=== End ===');
+            return available;
+        }
+        
+        // ===================================
+        // DAY SECTIONS
+        // ===================================
+        function addDay() {
+            dayCounter++;
+            const daysContainer = document.getElementById('daysContainer');
+            
+            const daySection = document.createElement('div');
+            daySection.className = 'day-order-section';
+            daySection.id = `day-${dayCounter}`;
+            
+            const availableDays = getAvailableDays();
+            
+            daySection.innerHTML = `
+                <div class="day-order-header">
+                    <span class="day-order-title" id="day-${dayCounter}-title">Select a Day</span>
+                    ${dayCounter > 1 ? `<button type="button" class="remove-day-btn" onclick="removeDay(${dayCounter})">✕</button>` : ''}
+                </div>
+                <select class="day-select" data-day-id="${dayCounter}" required>
+                    <option value="">Select a day</option>
+                    ${availableDays.map(day => `<option value="${day}">${day}</option>`).join('')}
+                </select>
+                <div class="items-container" id="items-${dayCounter}"></div>
+                <button type="button" class="add-item-btn" id="add-item-${dayCounter}" style="display: none;">+ Add Item</button>
+            `;
+            
+            daysContainer.appendChild(daySection);
+            
+            // Add event listener
+            const daySelect = daySection.querySelector('.day-select');
+            daySelect.addEventListener('change', () => updateDayItems(dayCounter));
+        }
+        
+        function removeDay(dayId) {
+            document.getElementById(`day-${dayId}`).remove();
+            updateSummary();
+        }
+        
+        function updateDayItems(dayId) {
+            const daySection = document.getElementById(`day-${dayId}`);
+            const daySelect = daySection.querySelector('.day-select');
+            const selectedDay = daySelect.value;
+            const itemsContainer = document.getElementById(`items-${dayId}`);
+            const addItemBtn = document.getElementById(`add-item-${dayId}`);
+            const dayTitle = document.getElementById(`day-${dayId}-title`);
+            
+            dayTitle.textContent = selectedDay || 'Select a Day';
+            itemsContainer.innerHTML = '';
+            
+            if (!selectedDay) {
+                addItemBtn.style.display = 'none';
+                updateSummary();
+                return;
+            }
+
+            // Wednesday delivery rule (this week)
+            let fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+            if (selectedDay === 'Wednesday' && fulfillment === 'Delivery') {
+                showError('Delivery is not available on Wednesday this week. Wednesday orders must be Pickup.');
+                document.getElementById('fulfillmentPickup').checked = true;
+                document.getElementById('deliveryAddressContainer').classList.remove('show');
+                document.getElementById('deliveryAddress').required = false;
+            }
+
+            // Get items for this day
+            const availableItems = menuData.filter(item => {
+                const day = item.DayOfWeek || item.day;
+                return day === selectedDay;
+            });
+            
+            console.log(`Items for ${selectedDay}:`, availableItems);
+            
+            if (availableItems.length === 0) {
+                itemsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 10px;">No items available for this day</p>';
+                addItemBtn.style.display = 'none';
+            } else {
+                addItemBtn.style.display = 'block';
+                
+                // Remove old event listener and add new one
+                const newAddItemBtn = addItemBtn.cloneNode(true);
+                addItemBtn.parentNode.replaceChild(newAddItemBtn, addItemBtn);
+                newAddItemBtn.addEventListener('click', () => addItem(dayId));
+                
+                // Add first item automatically
+                addItem(dayId);
+            }
+            
+            updateSummary();
+        }
+        
+        // ===================================
+        // ITEM ROWS
+        // ===================================
+        function addItem(dayId) {
+            const daySection = document.getElementById(`day-${dayId}`);
+            const daySelect = daySection.querySelector('.day-select');
+            const selectedDay = daySelect.value;
+            
+            if (!selectedDay) {
+                showError('Please select a day first before adding items.'); window.scrollTo(0, 0);
+                return;
+            }
+            
+            const itemsContainer = document.getElementById(`items-${dayId}`);
+            const itemId = Date.now() + Math.random();
+            
+            // Get unique items for this day
+            const availableItems = menuData.filter(item => {
+                const day = item.DayOfWeek || item.day;
+                return day === selectedDay;
+            });
+            
+            const uniqueItems = [...new Set(availableItems.map(m => m.ItemName || m.item))];
+            
+            const itemRow = document.createElement('div');
+            itemRow.className = 'item-row';
+            itemRow.id = `item-${itemId}`;
+            itemRow.innerHTML = `
+                <select class="item-select" data-item-id="${itemId}" data-day="${selectedDay}" required>
+                    <option value="">Select item</option>
+                    ${uniqueItems.map(item => `<option value="${item}">${item}</option>`).join('')}
+                </select>
+                <select class="size-select" data-item-id="${itemId}" required>
+                    <option value="">Select size</option>
+                </select>
+                <select class="qty-input" data-item-id="${itemId}" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                <button type="button" class="remove-item-btn" onclick="removeItem(${itemId})">✕</button>
+            `;
+            
+            itemsContainer.appendChild(itemRow);
+            
+            // Add event listeners
+            const itemSelect = itemRow.querySelector('.item-select');
+            itemSelect.addEventListener('change', () => updateSizeOptions(itemId));
+            
+            const sizeSelect = itemRow.querySelector('.size-select');
+            sizeSelect.addEventListener('change', updateSummary);
+            
+            const qtyInput = itemRow.querySelector('.qty-input');
+            qtyInput.addEventListener('change', updateSummary);
+        }
+        
+        function removeItem(itemId) {
+            document.getElementById(`item-${itemId}`).remove();
+            updateSummary();
+        }
+        
+        function updateSizeOptions(itemId) {
+            const itemSelect = document.querySelector(`.item-select[data-item-id="${itemId}"]`);
+            const sizeSelect = document.querySelector(`.size-select[data-item-id="${itemId}"]`);
+            
+            const selectedItem = itemSelect.value;
+            const selectedDay = itemSelect.getAttribute('data-day');
+            
+            sizeSelect.innerHTML = '<option value="">Select size</option>';
+            
+            if (selectedItem && selectedDay) {
+                const sizes = menuData.filter(m => {
+                    const day = m.DayOfWeek || m.day;
+                    const item = m.ItemName || m.item;
+                    return item === selectedItem && day === selectedDay;
+                });
+                
+                sizes.forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size.Size || size.size;
+                    option.setAttribute('data-price', size.Price || size.price);
+                    option.textContent = `${size.Size || size.size} - $${(size.Price || size.price).toFixed(2)}`;
+                    sizeSelect.appendChild(option);
+                });
+            }
+            
+            updateSummary();
+        }
+        
+        // ===================================
+        // ORDER SUMMARY
+        // ===================================
+        function updateSummary() {
+            const summaryContent = document.getElementById('summaryContent');
+            const daySections = document.querySelectorAll('.day-order-section');
+            
+            let orderItems = [];
+            let subtotal = 0;
+            const selectedDays = new Set();
+            
+            daySections.forEach(daySection => {
+                const daySelect = daySection.querySelector('.day-select');
+                const day = daySelect.value;
+                
+                if (!day) return;
+                selectedDays.add(day);
+                
+                const itemRows = daySection.querySelectorAll('.item-row');
+                itemRows.forEach(row => {
+                    const itemSelect = row.querySelector('.item-select');
+                    const sizeSelect = row.querySelector('.size-select');
+                    const qtyInput = row.querySelector('.qty-input');
+                    
+                    const itemName = itemSelect.value;
+                    const size = sizeSelect.value;
+                    const qty = parseInt(qtyInput.value) || 0;
+                    
+                    if (itemName && size && qty > 0) {
+                        const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                        const lineTotal = price * qty;
+                        
+                        subtotal += lineTotal;
+                        orderItems.push({
+                            day: day,
+                            item: itemName,
+                            size: size,
+                            qty: qty,
+                            price: price,
+                            lineTotal: lineTotal
+                        });
+                    }
+                });
+            });
+            
+            let fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+            // Enforce Wednesday delivery rule
+            if (fulfillment === 'Delivery' && selectedDays.has('Wednesday')) {
+                fulfillment = 'Pickup';
+                document.getElementById('fulfillmentPickup').checked = true;
+                document.getElementById('deliveryAddressContainer').classList.remove('show');
+                document.getElementById('deliveryAddress').required = false;
+                showError('Delivery is not available on Wednesday this week. We switched your order to Pickup.');
+            }
+
+            const deliveryFee = fulfillment === 'Delivery' ? (DELIVERY_FEE_PER_DAY * selectedDays.size) : 0;
+            const total = subtotal + deliveryFee;
+            
+            if (orderItems.length === 0) {
+                summaryContent.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Add items to see your order summary</p>';
+                return;
+            }
+            
+            let html = '';
+            const groupedByDay = {};
+            orderItems.forEach(item => {
+                if (!groupedByDay[item.day]) {
+                    groupedByDay[item.day] = [];
+                }
+                groupedByDay[item.day].push(item);
+            });
+            
+            daysOfWeek.forEach(day => {
+                if (groupedByDay[day]) {
+                    html += `<div style="margin-bottom: 0.75rem;"><strong>${day}:</strong></div>`;
+                    groupedByDay[day].forEach(item => {
+                        html += `
+                            <div class="summary-line">
+                                <span>${item.item} (${item.size}) x${item.qty}</span>
+                                <span>$${item.lineTotal.toFixed(2)}</span>
+                            </div>
+                        `;
+                    });
+                }
+            });
+            
+            html += `
+                <div class="summary-line" style="margin-top: 0.75rem; border-top: 1px solid var(--border-warm); padding-top: 0.5rem;">
+                    <span>Subtotal:</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+            `;
+            
+            if (deliveryFee > 0) {
+                html += `
+                    <div class="summary-line">
+                        <span>Delivery Fee (${selectedDays.size} day${selectedDays.size > 1 ? 's' : ''}):</span>
+                        <span>$${deliveryFee.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+            
+            html += `
+                <div class="summary-total">
+                    <span>Total:</span>
+                    <span>$${total.toFixed(2)}</span>
+                </div>
+            `;
+            
+            summaryContent.innerHTML = html;
+        }
+        
+        // ===================================
+        // SELECTED DAYS HELPERS
+        // ===================================
+        function getSelectedDaysFromForm() {
+            const days = new Set();
+            document.querySelectorAll('.day-order-section .day-select').forEach(sel => {
+                if (sel.value) days.add(sel.value);
+            });
+            return days;
+        }
+
+        // ===================================
+        // EVENT LISTENERS
+        // ===================================
+        function setupEventListeners() {
+            // Fulfillment method change
+            document.querySelectorAll('input[name="fulfillment"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const deliveryContainer = document.getElementById('deliveryAddressContainer');
+
+                    // If user selects Delivery but Wednesday is in the order, block it
+                    if (radio.value === 'Delivery') {
+                        const selectedDays = getSelectedDaysFromForm();
+                        if (selectedDays.has('Wednesday')) {
+                            showError('Delivery is not available on Wednesday this week. Please choose Pickup for Wednesday orders.');
+                            document.getElementById('fulfillmentPickup').checked = true;
+                        }
+                    }
+
+                    const selectedFulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+                    if (selectedFulfillment === 'Delivery') {
+                        deliveryContainer.classList.add('show');
+                        document.getElementById('deliveryAddress').required = true;
+                    } else {
+                        deliveryContainer.classList.remove('show');
+                        document.getElementById('deliveryAddress').required = false;
+                    }
+                    updateSummary();
+                });
+            });
+            
+            // Add day button
+            document.getElementById('addDayBtn').addEventListener('click', addDay);
+            
+            // Submit button
+            document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+        }
+        
+        // ===================================
+        // ORDER SUBMISSION
+        // ===================================
+        async function handleSubmit(e) {
+            e.preventDefault();
+            clearFieldErrors();
+            hideMessages();
+            let firstInvalidField = null;
+            const fail = (el, msg) => {
+                showError(msg);
+                setFieldError(el, msg);
+                if (!firstInvalidField) firstInvalidField = el;
+            };
+            
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            let fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+            const deliveryAddress = fulfillment === 'Delivery' ? document.getElementById('deliveryAddress').value.trim() : '';
+            
+            if (!name) {
+                fail(document.getElementById('customerName'), 'Please enter your name.');
+                return;
+            }
+            
+            if (!phone) {
+                fail(document.getElementById('customerPhone'), 'Please enter your phone number.');
+                return;
+            }
+            
+            if (fulfillment === 'Delivery' && !deliveryAddress) {
+                fail(document.getElementById('deliveryAddress'), 'Please enter a delivery address.');
+                return;
+            }
+            
+            // Collect order data
+            const daySections = document.querySelectorAll('.day-order-section');
+            const orderLines = [];
+            let subtotal = 0;
+            const selectedDays = new Set();
+            let hasError = false;
+            
+            daySections.forEach((daySection, sectionIndex) => {
+                const daySelect = daySection.querySelector('.day-select');
+                const day = (daySelect.value || '').trim();
+
+                if (!day) {
+                    fail(daySelect, `Please select a day for order section #${sectionIndex + 1}.`);
+                    hasError = true;
+                    return;
+                }
+
+                if (!isDayAvailableForOrdering(day)) {
+                    fail(daySelect, `Ordering is not available for ${day}. Please select another day.`);
+                    hasError = true;
+                    return;
+                }
+
+                selectedDays.add(day);
+
+                const itemRows = daySection.querySelectorAll('.item-row');
+                let hasAtLeastOneCompleteItem = false;
+
+                itemRows.forEach(row => {
+                    const itemSelect = row.querySelector('.item-select');
+                    const sizeSelect = row.querySelector('.size-select');
+                    const qtyInput = row.querySelector('.qty-input');
+
+                    const itemName = (itemSelect.value || '').trim();
+                    const size = (sizeSelect.value || '').trim();
+                    const qty = parseInt(qtyInput.value, 10) || 0;
+
+                    // Treat rows with no item selected as empty (ignore)
+                    if (!itemName && !size) {
+                        return;
+                    }
+
+                    // Field-specific error messages
+                    if (!itemName) {
+                        fail(itemSelect, `Please select an item for ${day}.`);
+                        hasError = true;
+                        return;
+                    }
+                    if (!size) {
+                        fail(sizeSelect, `Please select a size for ${itemName} on ${day}.`);
+                        hasError = true;
+                        return;
+                    }
+                    if (qty < 1) {
+                        fail(qtyInput, `Please select a quantity for ${itemName} on ${day}.`);
+                        hasError = true;
+                        return;
+                    }
+
+                    const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+                    const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+                    const lineTotal = price * qty;
+
+                    subtotal += lineTotal;
+                    hasAtLeastOneCompleteItem = true;
+
+                    orderLines.push({
+                        day: day,
+                        itemName: itemName,
+                        size: size,
+                        quantity: qty,
+                        unitPrice: price,
+                        lineTotal: lineTotal
+                    });
+                });
+
+                if (hasError) return;
+
+                if (!hasAtLeastOneCompleteItem) {
+                    fail(daySelect, `Please add at least one menu item for ${day}.`);
+                    hasError = true;
+                    return;
+                }
+            });
+            
+            if (hasError) return;
+            
+            if (orderLines.length === 0) {
+                fail(document.getElementById('daysContainer'), 'Please add at least one item to your order.');
+                return;
+            }
+            
+            // Enforce Wednesday delivery rule
+            if (fulfillment === 'Delivery' && selectedDays.has('Wednesday')) {
+                fulfillment = 'Pickup';
+                document.getElementById('fulfillmentPickup').checked = true;
+                document.getElementById('deliveryAddressContainer').classList.remove('show');
+                document.getElementById('deliveryAddress').required = false;
+                showError('Delivery is not available on Wednesday this week. We switched your order to Pickup.');
+            }
+
+            const deliveryFee = fulfillment === 'Delivery' ? (DELIVERY_FEE_PER_DAY * selectedDays.size) : 0;
+            const total = subtotal + deliveryFee;
+            
+            const orderData = {
+                weekLabel: activeWeek,
+                name: name,
+                phone: phone,
+                email: email,
+                fulfillment: fulfillment,
+                deliveryAddress: deliveryAddress,
+                subtotal: subtotal,
+                deliveryFee: deliveryFee,
+                total: total,
+                orderLines: orderLines
+            };
+            
+            if (firstInvalidField) {
+                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (firstInvalidField.focus) firstInvalidField.focus();
+                return;
+            }
+
+            // Submit order
+            showLoading(true);
+            try {
+                const orderDataEncoded = encodeURIComponent(JSON.stringify(orderData));
+                const url = `${SCRIPT_URL}?action=submitOrder&orderData=${orderDataEncoded}`;
+                
+                const response = await fetch(url);
+                const result = await response.json();
+                showLoading(false);
+                
+                if (result.error) {
+                    showError(result.error);
+                    return;
+                }
+                
+                showConfirmation(orderData, result.orderId);
+            } catch (error) {
+                showLoading(false);
+                showError('Failed to submit order. Please try again.');
+                console.error(error);
+            }
+        }
+        
+        // ===================================
+        // CONFIRMATION
+        // ===================================
+        function showConfirmation(orderData, orderId) {
+            document.getElementById('formContainer').classList.add('hidden');
+            const confirmationContainer = document.getElementById('confirmationContainer');
+            confirmationContainer.classList.remove('hidden');
+            
+            let receiptText = `
+═══════════════════════════════════
+      ARUNA'S KITCHEN
+       ORDER CONFIRMED
+═══════════════════════════════════
+
+Order ID: ${orderId}
+Week: ${orderData.weekLabel}
+Customer: ${orderData.name}
+Phone: ${orderData.phone}
+Fulfillment: ${orderData.fulfillment}
+${orderData.deliveryAddress ? `Address: ${orderData.deliveryAddress}` : ''}
+
+───────────────────────────────────
+ORDER DETAILS
+───────────────────────────────────
+`;
+            
+            const groupedByDay = {};
+            orderData.orderLines.forEach(line => {
+                if (!groupedByDay[line.day]) {
+                    groupedByDay[line.day] = [];
+                }
+                groupedByDay[line.day].push(line);
+            });
+            
+            daysOfWeek.forEach(day => {
+                if (groupedByDay[day]) {
+                    receiptText += `\n${day}:\n`;
+                    groupedByDay[day].forEach(line => {
+                        receiptText += `  ${line.itemName} (${line.size})\n`;
+                        receiptText += `    ${line.quantity} x $${line.unitPrice.toFixed(2)} = $${line.lineTotal.toFixed(2)}\n`;
+                    });
+                }
+            });
+            
+            receiptText += `
+═══════════════════════════════════
+Subtotal:        $${orderData.subtotal.toFixed(2)}`;
+            
+            if (orderData.deliveryFee > 0) {
+                receiptText += `\nDelivery Fee:    $${orderData.deliveryFee.toFixed(2)}`;
+            }
+            
+            receiptText += `
+───────────────────────────────────
+TOTAL:           $${orderData.total.toFixed(2)}
+═══════════════════════════════════
+
+Thank you for your order!
+We'll have it ready for you.
+
+📞 +1 248-877-9924
+            `;
+            
+            confirmationContainer.innerHTML = `
+                <div class="confirmation-card">
+                    <div class="confirmation-icon">✅</div>
+                    <h2 class="confirmation-title">Order Confirmed!</h2>
+                    <p class="order-id">Order ID: ${orderId}</p>
+                    <div class="receipt">${receiptText}</div>
+                    <button class="new-order-btn" onclick="location.reload()">Place Another Order</button>
+                </div>
+            `;
+        }
+        
+        // ===================================
+        // UTILITY FUNCTIONS
+        // ===================================
+        function showLoading(show) {
+            document.getElementById('loadingIndicator').style.display = show ? 'block' : 'none';
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+        
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+        }
+
+        function clearFieldErrors() {
+            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+            document.querySelectorAll('.field-error-message').forEach(el => el.remove());
+        }
+
+        function setFieldError(element, message) {
+            if (!element) return;
+            element.classList.add('field-error');
+
+            // Remove existing inline message for this element (if any)
+            const existing = element.parentElement?.querySelector(`.field-error-message[data-for="${element.id || element.name || ''}"]`);
+            if (existing) existing.remove();
+
+            const msg = document.createElement('div');
+            msg.className = 'field-error-message';
+            msg.textContent = message;
+            msg.setAttribute('data-for', element.id || element.name || '');
+
+            // Insert message right after the field
+            if (element.nextSibling) {
+                element.parentNode.insertBefore(msg, element.nextSibling);
+            } else {
+                element.parentNode.appendChild(msg);
+            }
+        }
+    
+        
+        // Make functions global for onclick handlers
+        window.removeDay = removeDay;
+        window.removeItem = removeItem;
+    </script>
+</body>
+</html>
