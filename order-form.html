@@ -189,6 +189,10 @@
     .food-scene .fish { background-image: url("kitchen-photos/spiced-fish-portions.webp"); background-position: 50% 46%; }
     .food-scene .crab { flex-grow: 1.2; background-image: url("kitchen-photos/crab-curry-container.webp"); background-position: 52% 49%; }
     .food-scene .crimson { background-image: url("kitchen-photos/vibrant-crimson-side.webp"); background-position: 50% 43%; }
+    .food-scene .skillet { flex-grow: 1.18; background-image: url("kitchen-photos/orange-curry-skillet.webp"); background-position: 50% 58%; }
+    .food-scene .rice-bowl { background-image: url("kitchen-photos/rice-and-egg-bowl.webp"); background-position: 50% 54%; }
+    .food-scene .spiced-chicken { background-image: url("kitchen-photos/herb-garnished-roasted-bites.webp"); background-position: 53% 45%; }
+    .food-scene .idli { background-image: url("kitchen-photos/steamed-cakes-and-sides.webp"); background-position: 49% 49%; }
     .cutoff { color: var(--ink); border-block: 1px dotted var(--sage); margin: 14px 0 30px; padding: 11px 0; font-size: 15px; }
     .app-grid { grid-template-columns: minmax(0, 1fr) 355px; gap: 49px; }
     .panel { box-shadow: none; border-radius: 8px; }
@@ -224,6 +228,8 @@
     .button-secondary { background: transparent; }
     .confirmation { border-radius: 8px; }
     .site-footer { margin: 38px auto 0; padding: 22px 0 28px; border-top: 1px dotted var(--sage); color: var(--muted); font-size: 14px; }
+    .footer-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 24px; }
+    .footer-layout .food-scene { height: clamp(88px, 9vw, 126px); border-radius: 0 24px 0 24px; }
     .footer-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 24px; margin-bottom: 12px; }
     @media (max-width: 1040px) and (min-width: 901px) {
       .shell { width: calc(100% - 48px); }
@@ -249,6 +255,7 @@
       .week-pill { font-size: 14px; }
       .cutoff { margin: 13px 0 23px; padding: 10px 0; font-size: 14px; }
       .site-footer { padding-top: 16px; }
+      .footer-layout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
       .footer-top { flex-direction: column; align-items: flex-start; }
       .panel-heading { padding: 0 0 16px; }
       .panel-heading h2 { font-size: 29px; }
@@ -292,7 +299,7 @@
     <div id="shopIntro">
       <div class="intro">
         <div class="intro-copy"><h1>Weekly menu</h1><div class="week-pill" id="weekLabel">This week's menu</div></div>
-        <div class="food-scene" aria-hidden="true"><span class="curry"></span><span class="rice"></span><span class="fish"></span></div>
+        <div class="food-scene" aria-hidden="true"><span class="skillet"></span><span class="rice-bowl"></span><span class="spiced-chicken"></span></div>
       </div>
       <div class="cutoff" id="cutoffNotice"><span id="cutoffText">Order by 10 PM Central for the next day. Pickup or $2 delivery per day.</span></div>
     </div>
@@ -308,7 +315,7 @@
         <div id="menuPanel" role="tabpanel" tabindex="0"><div class="menu-day-heading"><div><h3 id="dayHeading"></h3><p id="dayDescription"></p></div><span class="day-label" id="dayStatus"></span></div><div id="menuItems"></div></div>
         <div class="menu-footer">
           <p>Food allergies or dietary restrictions? <a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint">Contact us before ordering.</a></p>
-          <div class="food-scene" aria-hidden="true"><span class="crab"></span><span class="crimson"></span></div>
+          <div class="food-scene" aria-hidden="true"><span class="crab"></span><span class="idli"></span><span class="crimson"></span></div>
         </div>
       </section>
 
@@ -331,7 +338,12 @@
     <section id="confirmation" class="panel confirmation" aria-labelledby="confirmationHeading" hidden></section>
     <p class="sr-only" id="cartAnnouncement" role="status" aria-live="polite" aria-atomic="true"></p>
   </main>
-  <footer class="shell site-footer"><div class="footer-top"><span>Aruna's Kitchen · Freshly cooked, homestyle flavors</span><a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint">Contact us</a></div><details><summary>Ordering information & policies</summary><ul><li>All orders are subject to availability and must be placed by 10 PM Central for next-day fulfillment.</li><li>Prices and menu items may change without notice.</li><li>Delivery times are estimates and may vary based on location and order volume.</li><li>Please inform us of any food allergies or dietary restrictions when placing your order.</li><li>We reserve the right to cancel or modify orders in case of unforeseen circumstances.</li><li>Payment terms and cancellation policies apply. Please contact us for details.</li><li>By placing an order, you agree to our terms of service and privacy policy.</li></ul></details></footer>
+  <footer class="shell site-footer">
+    <div class="footer-layout">
+      <div><div class="footer-top"><span>Aruna's Kitchen · Freshly cooked, homestyle flavors</span><a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint">Contact us</a></div><details><summary>Ordering information & policies</summary><ul><li>All orders are subject to availability and must be placed by 10 PM Central for next-day fulfillment.</li><li>Prices and menu items may change without notice.</li><li>Delivery times are estimates and may vary based on location and order volume.</li><li>Please inform us of any food allergies or dietary restrictions when placing your order.</li><li>We reserve the right to cancel or modify orders in case of unforeseen circumstances.</li><li>Payment terms and cancellation policies apply. Please contact us for details.</li><li>By placing an order, you agree to our terms of service and privacy policy.</li></ul></details></div>
+      <div class="food-scene" aria-hidden="true"><span class="curry"></span><span class="rice"></span><span class="fish"></span></div>
+    </div>
+  </footer>
   <div class="mobile-cart" id="mobileCart" hidden><div><span id="mobileCartCount"></span><strong id="mobileCartTotal"></strong></div><button type="button" class="button button-primary" id="reviewOrder">Review order <span aria-hidden="true">→</span></button></div>
 
   <script>
