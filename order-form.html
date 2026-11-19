@@ -175,11 +175,19 @@
     .header-contact { margin-left: auto; font-variant-numeric: tabular-nums; }
     body.is-confirmed .header-nav a[href^="#"] { display: none; }
     main { padding-top: 24px; }
-    .intro { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 7px; min-height: clamp(126px, 12vw, 163px); padding: 20px 0; }
-    .intro::before, .site-footer::before { content: ''; position: absolute; z-index: -1; inset: 0 0 0 auto; pointer-events: none; user-select: none; background-repeat: no-repeat; background-size: cover; }
-    .intro::before { width: 54%; background-image: linear-gradient(90deg, var(--background), transparent 50%), url("kitchen-photos/red-curry-and-green-vegetables.webp"); background-position: center, center 49%; }
-    .intro h1 { max-width: 53%; font-size: clamp(38px, 4.8vw, 62px); letter-spacing: -.035em; margin: 0; line-height: 1.1; font-weight: 700; }
+    .intro { display: grid; grid-template-columns: minmax(210px, .67fr) minmax(0, 1.33fr); align-items: center; gap: clamp(18px, 3vw, 42px); }
+    .intro h1 { margin: 0 0 6px; font-size: clamp(38px, 4.8vw, 62px); font-weight: 700; line-height: 1.08; letter-spacing: -.04em; }
     .week-pill { color: var(--muted); font-size: 16px; font-weight: 600; }
+    .food-scene { --slant: clamp(15px, 2.6vw, 32px); display: flex; overflow: hidden; isolation: isolate; pointer-events: none; user-select: none; }
+    .intro .food-scene { height: clamp(141px, 13vw, 176px); border-radius: 0 38px 0 38px; }
+    .food-scene > span { flex: 1 1 0; min-width: 0; position: relative; background-repeat: no-repeat; background-size: cover; }
+    .food-scene > span + span { margin-left: calc(0px - var(--slant)); clip-path: polygon(var(--slant) 0, 100% 0, 100% 100%, 0 100%); }
+    .food-scene > span + span::after { position: absolute; content: ''; inset: 0; background: var(--background); clip-path: polygon(var(--slant) 0, calc(var(--slant) + 3px) 0, 3px 100%, 0 100%); }
+    .food-scene .curry { flex-grow: 1.19; background-image: url("kitchen-photos/red-curry-and-green-vegetables.webp"); background-position: 58% 43%; }
+    .food-scene .rice { background-image: url("kitchen-photos/golden-rice-in-pan.webp"); background-position: 50% 49%; }
+    .food-scene .fish { background-image: url("kitchen-photos/spiced-fish-portions.webp"); background-position: 50% 46%; }
+    .food-scene .crab { flex-grow: 1.2; background-image: url("kitchen-photos/crab-curry-container.webp"); background-position: 52% 49%; }
+    .food-scene .crimson { background-image: url("kitchen-photos/vibrant-crimson-side.webp"); background-position: 50% 43%; }
     .cutoff { color: var(--ink); border-block: 1px dotted var(--sage); margin: 14px 0 30px; padding: 11px 0; font-size: 15px; }
     .app-grid { grid-template-columns: minmax(0, 1fr) 355px; gap: 49px; }
     .panel { box-shadow: none; border-radius: 8px; }
@@ -202,7 +210,9 @@
     .menu-variant.is-selected { background: #e8eddf; }
     .stepper { background: var(--surface); border-color: var(--control-border); border-radius: 5px; }
     .variant-price { font-size: 18px; }
-    .menu-footer { background: transparent; border-top: 1px dotted var(--sage); margin-top: 8px; padding: 17px 0; }
+    .menu-footer { display: grid; grid-template-columns: minmax(150px, .8fr) minmax(0, 1.2fr); gap: 20px; align-items: center; background: transparent; border-top: 1px dotted var(--sage); margin-top: 8px; padding: 18px 0; }
+    .menu-footer p { margin: 0; }
+    .menu-footer .food-scene { height: clamp(112px, 11vw, 148px); border-radius: 24px 0 24px 0; }
     .checkout { border-color: #b9c0b1; background: var(--surface); }
     .cart-title h2 { font-size: 29px; }
     .cart-day { text-transform: uppercase; letter-spacing: .05em; font-size: 12px; }
@@ -212,8 +222,7 @@
     .method:has(input:checked) { background: #e5eadb; border-color: #5d7765; }
     .button-secondary { background: transparent; }
     .confirmation { border-radius: 8px; }
-    .site-footer { position: relative; isolation: isolate; min-height: 134px; margin: 38px auto 0; padding: 22px min(32%, 310px) 28px 0; border-top: 1px dotted var(--sage); color: var(--muted); font-size: 14px; }
-    .site-footer::before { width: min(34%, 335px); max-height: 134px; background-image: linear-gradient(90deg, var(--background), transparent 60%), url("kitchen-photos/golden-rice-in-pan.webp"); background-position: center, center 56%; }
+    .site-footer { margin: 38px auto 0; padding: 22px 0 28px; border-top: 1px dotted var(--sage); color: var(--muted); font-size: 14px; }
     .footer-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 24px; margin-bottom: 12px; }
     @media (max-width: 1040px) and (min-width: 901px) {
       .shell { width: calc(100% - 48px); }
@@ -221,7 +230,7 @@
     }
     @media (max-width: 900px) {
       .shell { width: min(740px, calc(100% - 40px)); }
-      .app-grid { grid-template-columns: 1fr; gap: 28px; }
+      .app-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
       .checkout { position: static; }
       .mobile-cart { background: #fffcf5; border-top-color: var(--sage); }
     }
@@ -232,9 +241,10 @@
       .header-nav { gap: 16px; }
       .header-nav a { min-height: 46px; font-size: 13px; }
       main { padding-top: 15px; }
-      .intro { min-height: 105px; padding: 15px 0; gap: 5px; }
-      .intro::before { width: 46%; }
-      .intro h1 { max-width: 64%; font-size: clamp(31px, 8.4vw, 42px); }
+      .intro { grid-template-columns: 1fr; gap: 12px; }
+      .intro-copy { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 3px 12px; }
+      .intro h1 { margin: 0; font-size: clamp(31px, 8.4vw, 42px); }
+      .intro .food-scene { height: clamp(95px, 25vw, 134px); border-radius: 0 24px 0 24px; }
       .week-pill { font-size: 14px; }
       .cutoff { margin: 13px 0 23px; padding: 10px 0; font-size: 14px; }
       .site-footer { padding-top: 16px; }
@@ -242,13 +252,14 @@
       .panel-heading { padding: 0 0 16px; }
       .panel-heading h2 { font-size: 29px; }
       .day-tabs { padding: 0 0 17px; }
-      .day-tab { flex-basis: 64px; min-width: 64px; }
+      .day-tab { flex-basis: clamp(52px, 15vw, 64px); min-width: 52px; }
       .menu-day-heading { padding: 15px 0; }
       .menu-day-heading h3 { font-size: 21px; }
       .menu-day-heading p { font-size: 13px; }
       .menu-item { margin: 0; padding: 20px 0; }
       .menu-item h3 { font-size: 18px; }
-      .menu-footer { padding: 15px 0; }
+      .menu-footer { grid-template-columns: 1fr; gap: 12px; padding: 15px 0 0; }
+      .menu-footer .food-scene { height: clamp(110px, 29vw, 145px); }
       .cart-title h2 { font-size: 27px; }
       .checkout { border-radius: 5px; }
     }
@@ -277,7 +288,10 @@
 
   <main class="shell" id="mainContent">
     <div id="shopIntro">
-      <div class="intro"><h1>Weekly menu</h1><div class="week-pill" id="weekLabel">This week's menu</div></div>
+      <div class="intro">
+        <div class="intro-copy"><h1>Weekly menu</h1><div class="week-pill" id="weekLabel">This week's menu</div></div>
+        <div class="food-scene" aria-hidden="true"><span class="curry"></span><span class="rice"></span><span class="fish"></span></div>
+      </div>
       <div class="cutoff" id="cutoffNotice"><span id="cutoffText">Order by 10 PM Central for the next day. Pickup or $2 delivery per day.</span></div>
     </div>
     <div id="globalNotice" class="notice error" role="alert" tabindex="-1" hidden></div>
@@ -290,7 +304,10 @@
         <div class="panel-heading"><h2 id="menuHeading" tabindex="-1">Choose a day</h2><p>Add dishes from any open day to your order.</p></div>
         <div class="day-tabs" id="dayTabs" role="tablist" aria-label="Menu day"></div>
         <div id="menuPanel" role="tabpanel" tabindex="0"><div class="menu-day-heading"><div><h3 id="dayHeading"></h3><p id="dayDescription"></p></div><span class="day-label" id="dayStatus"></span></div><div id="menuItems"></div></div>
-        <div class="menu-footer">Food allergies or dietary restrictions? <a href="tel:+12488779924">Please call us before ordering.</a></div>
+        <div class="menu-footer">
+          <p>Food allergies or dietary restrictions? <a href="tel:+12488779924">Please call us before ordering.</a></p>
+          <div class="food-scene" aria-hidden="true"><span class="crab"></span><span class="crimson"></span></div>
+        </div>
       </section>
 
       <aside class="panel checkout" id="checkout" aria-labelledby="cartHeading">
