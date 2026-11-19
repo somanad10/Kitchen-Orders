@@ -1,1840 +1,741 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aruna's Kitchen - Weekly Order Form</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            /* Warm Amber Color Scheme - NOT brown! */
-            --primary: #d97706;
-            --primary-light: #f59e0b;
-            --primary-dark: #b45309;
-            --accent: #fcd34d;
-            --accent-light: #fde68a;
-            
-            --bg-cream: #fef3c7;
-            --bg-white: #ffffff;
-            --bg-warm: #fffbeb;
-            
-            --text-dark: #92400e;
-            --text-medium: #b45309;
-            --text-muted: #d97706;
-            
-            --border-light: #fde68a;
-            --border-warm: #fcd34d;
-            
-            --success: #16a34a;
-            --success-bg: #dcfce7;
-            --warning: #ea580c;
-            --warning-bg: #ffedd5;
-            --error: #dc2626;
-            --error-bg: #fee2e2;
-        }
-        
-        body {
-            font-family: 'Source Sans Pro', sans-serif;
-            background: var(--bg-cream);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, var(--bg-white), var(--bg-warm));
-            text-align: center;
-            padding: 1.5rem 1rem;
-            border-bottom: 3px solid var(--primary);
-        }
-        
-        .logo-container {
-            margin-bottom: 1rem;
-        }
-        
-        #logo {
-            max-width: 400px;
-            width: 90%;
-            height: auto;
-            margin: 0 auto 1rem;
-            display: block;
-        }
-        
-        .logo-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(217, 119, 6, 0.1);
-        }
-        
-        .phone-number {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-        
-        .week-header {
-            margin-top: 0.75rem;
-        }
-        
-        .week-label {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-        
-        .cutoff-banner {
-            background: #FFF7E6;
-            color: #7A4A00;
-            padding: 12px 16px;
-            border-bottom: 1px solid #F3D7A5;
-            font-size: 14px;
-            line-height: 1.4;
-            text-align: center;
-        }
-        
-        .cutoff-banner strong {
-            color: var(--primary-dark);
-        }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-        
-        .section-card {
-            background: var(--bg-white);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-light);
-            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.08);
-        }
-        
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent-light);
-        }
-        
-        .menu-day {
-            margin-bottom: 1rem;
-        }
-        
-        .menu-day:last-child {
-            margin-bottom: 0;
-        }
-        
-        .menu-day-header {
-            font-weight: 600;
-            color: var(--text-dark);
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .menu-day-header.disabled {
-            color: var(--text-muted);
-            opacity: 0.5;
-        }
-        
-        .menu-day-header .day-badge {
-            background: var(--primary);
-            color: white;
-            padding: 0.15rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        
-        .menu-day-header.disabled .day-badge {
-            background: #bdbdbd;
-        }
-        
-        .menu-items-list {
-            background: var(--bg-warm);
-            border-radius: 6px;
-            padding: 0.5rem 0.75rem;
-        }
-        
-        .menu-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.4rem 0;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--border-light);
-        }
-        
-        .menu-item-row:last-child {
-            border-bottom: none;
-        }
-        
-        .menu-item-name {
-            flex: 1;
-            color: var(--text-medium);
-        }
-        
-        .menu-item-price {
-            color: var(--primary);
-            font-weight: 600;
-            margin-left: 1rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-label {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-medium);
-            margin-bottom: 0.4rem;
-            font-weight: 600;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            background: var(--bg-white);
-            border: 1px solid var(--border-warm);
-            border-radius: 8px;
-            color: var(--text-dark);
-            font-size: 1rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
-        }
-        
-        .form-input::placeholder {
-            color: var(--text-muted);
-        }
-        
-        .radio-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        
-        .radio-option {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        .radio-option input {
-            display: none;
-        }
-        
-        .radio-option label {
-            display: block;
-            padding: 0.75rem;
-            background: var(--bg-warm);
-            border: 2px solid var(--border-warm);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            color: var(--text-medium);
-        }
-        
-        .radio-option input:checked + label {
-            border-color: var(--primary);
-            background: rgba(217, 119, 6, 0.08);
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .radio-option label:hover {
-            background: var(--accent-light);
-            border-color: var(--accent);
-        }
-        
-        .delivery-address-container {
-            display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-light);
-        }
-        
-        .delivery-address-container.show {
-            display: block;
-        }
-        
-        .delivery-note {
-            font-size: 0.8rem;
-            color: var(--warning);
-            margin-top: 0.4rem;
-            font-style: italic;
-        }
-        
-        .day-order-section {
-            background: var(--bg-warm);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-light);
-        }
-        
-        .day-order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-        
-        .day-order-title {
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-        
-        .remove-day-btn {
-            background: transparent;
-            border: none;
-            color: var(--error);
-            cursor: pointer;
-            padding: 0.25rem;
-            font-size: 1.2rem;
-        }
-        
-        .day-select {
-            width: 100%;
-            padding: 0.6rem;
-            background: var(--bg-white);
-            border: 1px solid var(--border-warm);
-            border-radius: 6px;
-            color: var(--text-dark);
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .day-select option:disabled {
-            color: #bdbdbd;
-        }
-        
-        .item-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .item-select {
-            flex: 1;
-            min-width: 150px;
-            padding: 0.5rem;
-            background: var(--bg-white);
-            border: 1px solid var(--border-warm);
-            border-radius: 6px;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-        }
-        
-        .size-select {
-            width: 100px;
-            padding: 0.5rem;
-            background: var(--bg-white);
-            border: 1px solid var(--border-warm);
-            border-radius: 6px;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-        }
-        
-        .qty-input {
-            width: 80px;
-            padding: 0.5rem;
-            background: var(--bg-white);
-            border: 1px solid var(--border-warm);
-            border-radius: 6px;
-            color: var(--text-dark);
-            font-size: 0.9rem;
-            text-align: center;
-        }
-        
-        .remove-item-btn {
-            background: transparent;
-            border: none;
-            color: var(--error);
-            cursor: pointer;
-            padding: 0.25rem 0.5rem;
-            font-size: 1rem;
-        }
-        
-        .add-item-btn {
-            background: transparent;
-            border: 1px dashed var(--border-warm);
-            color: var(--text-muted);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            width: 100%;
-            margin-top: 0.5rem;
-            transition: all 0.2s;
-        }
-        
-        .add-item-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(217, 119, 6, 0.05);
-        }
-        
-        .add-day-btn {
-            background: var(--bg-white);
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.2s;
-        }
-        
-        .add-day-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .summary-content {
-            background: var(--bg-warm);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        
-        .summary-line {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.4rem 0;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--border-light);
-            color: var(--text-medium);
-        }
-        
-        .summary-line:last-child {
-            border-bottom: none;
-        }
-        
-        .summary-total {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0 0;
-            margin-top: 0.5rem;
-            border-top: 2px solid var(--primary);
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 1rem;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
-        }
-        
-        .submit-btn:disabled {
-            background: #bdbdbd;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .message {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        
-        .message.error {
-            background: var(--error-bg);
-            border: 1px solid var(--error);
-            color: var(--error);
-        }
-        
-        .message.success {
-            background: var(--success-bg);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border-light);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .confirmation-card {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-        
-        .confirmation-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .confirmation-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: var(--success);
-            margin-bottom: 0.5rem;
-        }
-        
-        .order-id {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-        
-        .receipt {
-            background: var(--bg-warm);
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: left;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-light);
-            color: var(--text-medium);
-        }
-        
-        .new-order-btn {
-            background: var(--primary);
-            border: none;
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 1.5rem 1rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--border-light);
-            margin-top: 1rem;
-            background: var(--bg-white);
-        }
-        
-        @media (max-width: 480px) {
-            .hero { padding: 1.25rem 1rem; }
-            .logo-text { font-size: 1.8rem; }
-            .container { padding: 0.75rem; }
-            .section-card { padding: 1rem; }
-            .radio-option { min-width: 100px; }
-            .item-row { flex-direction: column; align-items: stretch; }
-            .item-select { min-width: 100%; }
-            .size-select, .qty-input { flex: 1; }
-        }
-    
-        /* ===================================
-           Day tabs: readable text when selected
-           =================================== */
-        .day-tab-btn .day-tab-day { 
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .day-tab-btn .day-tab-date {
-            color: var(--text-medium);
-            font-size: 0.75rem;
-            margin-top: 2px;
-        }
-        .day-tab-btn .day-tab-status {
-            font-size: 0.7rem;
-            margin-top: 2px;
-        }
-        .day-tab-btn.available {
-            background: var(--bg-white);
-            border-color: var(--border-warm);
-            color: var(--text-dark);
-        }
-        .day-tab-btn.unavailable {
-            background: #fee2e2;
-            border-color: #fca5a5;
-            color: #991b1b;
-        }
-        .day-tab-btn.selected {
-            background: var(--primary) !important;
-            border-color: var(--primary-dark) !important;
-            color: white !important;
-            transform: translateY(-2px);
-        }
-        .day-tab-btn.selected .day-tab-day { color: #ffffff; }
-        .day-tab-btn.selected .day-tab-date { color: var(--accent-light); }
-        .day-tab-btn.selected .day-tab-status { color: #ffffff; opacity: 0.95; }
-
-    
-        /* Inline field validation (red border + message under field) */
-        .field-error {
-            border: 2px solid var(--error) !important;
-        }
-        .field-error-message {
-            color: var(--error);
-            font-size: 0.9rem;
-            margin-top: 6px;
-        }
-    
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FAF7F0">
+  <title>Aruna's Kitchen — Weekly Menu & Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #FAF7F0; --surface: #fff; --ink: #292722; --muted: #6c6258;
+      --brand: #9A4025; --brand-dark: #753015; --brand-soft: #f7eadd;
+      --border: #d8ccbd; --control-border: #9b8b79; --soft: #f5f0e8;
+      --green: #245c40; --green-soft: #edf5ee; --red: #a02c25; --red-soft: #fff0ed;
+      --shadow: 0 10px 35px rgba(64, 43, 22, .045); --radius: 18px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body { margin: 0; background: var(--background); color: var(--ink); font: 400 17px/1.5 'Source Sans Pro', sans-serif; }
+    button, input, select { font: inherit; }
+    button, a, input { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+    a { color: var(--brand); text-underline-offset: 3px; }
+    :focus-visible { outline: 3px solid #236b91; outline-offset: 4px; }
+    [hidden] { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .skip-link { position: fixed; top: 12px; left: 12px; padding: 12px 20px; background: white; z-index: 20; transform: translateY(-150%); }
+    .skip-link:focus { transform: none; }
+    .shell { width: min(1120px, calc(100% - 64px)); margin: 0 auto; }
+    .site-header { border-bottom: 1px solid var(--border); background: var(--surface); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 23px 0; }
+    .brand { display: flex; align-items: center; gap: 16px; color: var(--ink); text-decoration: none; }
+    .brand img { width: 76px; height: 76px; object-fit: contain; }
+    .brand-name { font-family: 'Playfair Display', Georgia, serif; font-size: 27px; font-weight: 600; line-height: 1.2; }
+    .header-contact { text-align: right; font-size: 15px; }
+    .header-contact span { display: block; color: var(--muted); font-size: 13px; margin-bottom: 3px; }
+    .header-contact a { color: var(--ink); font-weight: 600; text-decoration: none; }
+    main { padding-top: 38px; }
+    .intro { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 24px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; }
+    h1 { margin-bottom: 9px; font-size: clamp(30px, 4vw, 39px); line-height: 1.2; }
+    .week-pill { flex: none; color: var(--brand-dark); border: 1px solid #dfc5ac; background: var(--brand-soft); border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 600; }
+    .cutoff { display: flex; align-items: baseline; gap: 10px; background: var(--soft); border: 1px solid var(--border); padding: 13px 18px; border-radius: 12px; margin-bottom: 27px; color: #5f503f; font-size: 15px; }
+    .app-grid { display: grid; grid-template-columns: minmax(0, 1fr) 355px; gap: 26px; align-items: start; }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .menu-panel { overflow: hidden; }
+    .panel-heading { padding: 22px 24px 18px; }
+    .panel-heading h2 { font-size: 24px; margin: 0 0 5px; }
+    .panel-heading p { margin: 0; color: var(--muted); font-size: 15px; }
+    .day-tabs { display: flex; overflow-x: auto; gap: 8px; padding: 0 24px 20px; scrollbar-width: thin; }
+    .day-tab { flex: 1 0 70px; min-width: 70px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface); padding: 10px 7px; color: var(--ink); text-align: center; }
+    .day-tab span { display: block; font-size: 13px; }
+    .day-tab strong { display: block; font-size: 16px; margin-bottom: 2px; }
+    .day-tab .day-state { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .day-tab[aria-selected="true"] { background: var(--brand); border-color: var(--brand); color: white; }
+    .day-tab[aria-selected="true"] .day-state { color: #fff0e6; }
+    .day-tab.is-closed:not([aria-selected="true"]) { background: #f4f1ed; color: #756e65; }
+    .menu-day-heading { display: flex; justify-content: space-between; gap: 16px; padding: 17px 24px; background: #faf7f2; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .menu-day-heading h3 { margin: 0; font-size: 18px; font-weight: 600; }
+    .menu-day-heading p { margin: 3px 0 0; font-size: 14px; color: var(--muted); }
+    .day-label { align-self: center; color: var(--green); font-size: 13px; font-weight: 600; white-space: nowrap; }
+    .menu-item { margin: 0 24px; padding: 21px 0; border-bottom: 1px solid #e9e1d7; }
+    .menu-item:last-child { border: 0; }
+    .menu-item h3 { margin: 0 0 11px; font-size: 19px; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+    .menu-variant { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-radius: 10px; margin: 4px -8px; padding: 7px 8px; }
+    .menu-variant.is-selected { background: var(--green-soft); }
+    .variant-copy { min-width: 0; }
+    .variant-size { font-size: 14px; color: var(--muted); margin-right: 8px; }
+    .variant-price { font-size: 17px; font-weight: 600; white-space: nowrap; }
+    .stepper { display: flex; align-items: center; flex: none; height: 44px; border: 1px solid var(--control-border); border-radius: 9px; overflow: visible; background: white; }
+    .stepper button { width: 42px; min-height: 42px; border: 0; color: var(--brand); font-size: 23px; background: transparent; border-radius: 8px; }
+    .stepper button:hover:not(:disabled) { background: var(--brand-soft); }
+    .stepper button:disabled { color: #a8a19a; }
+    .stepper input { width: 36px; height: 40px; padding: 0; border: 0; text-align: center; color: var(--ink); background: transparent; appearance: textfield; -moz-appearance: textfield; font-weight: 600; }
+    .stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .not-orderable { font-size: 13px; color: var(--muted); padding: 10px 0; }
+    .menu-footer { padding: 15px 24px; border-top: 1px solid var(--border); color: var(--muted); background: #faf7f2; font-size: 14px; }
+    .checkout { position: sticky; top: 22px; }
+    .cart-section { padding: 22px 23px; }
+    .cart-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .cart-title h2 { margin: 0; font-size: 24px; }
+    .item-count { font: 600 13px/1.4 'Source Sans Pro', sans-serif; color: var(--muted); }
+    .empty-cart { text-align: center; padding: 21px 8px; color: var(--muted); border: 1px dashed var(--border); border-radius: 11px; font-size: 15px; }
+    .empty-cart svg { display: block; margin: 0 auto 11px; color: #a18b72; }
+    .cart-day { margin: 19px 0 7px; font-size: 13px; color: var(--brand); font-weight: 700; }
+    .cart-day:first-child { margin-top: 0; }
+    .cart-row { display: grid; grid-template-columns: minmax(0,1fr) auto 28px; align-items: start; gap: 8px; padding: 8px 0; font-size: 15px; }
+    .cart-row small { display: block; color: var(--muted); font-size: 13px; }
+    .cart-row > div { overflow-wrap: anywhere; }
+    .cart-row .cart-amount { font-weight: 600; }
+    .remove-button { width: 28px; height: 28px; border: 0; background: none; color: var(--muted); border-radius: 5px; margin-top: -2px; font-size: 20px; line-height: 1; }
+    .remove-button:hover:not(:disabled) { color: var(--red); background: var(--red-soft); }
+    .cart-row.expired { color: var(--red); }
+    .totals { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .total-line { display: flex; justify-content: space-between; gap: 16px; margin: 6px 0; font-size: 15px; }
+    .total-line.grand { font-weight: 700; font-size: 23px; padding-top: 9px; margin-top: 12px; border-top: 1px solid var(--border); }
+    .checkout-form { border-top: 1px solid var(--border); padding: 22px 23px; }
+    .checkout-form h2 { margin: 0 0 17px; font: 600 19px/1.3 'Source Sans Pro', sans-serif; }
+    fieldset { min-width: 0; margin: 0; border: 0; padding: 0; }
+    .field { margin-bottom: 15px; }
+    .field label, .fulfillment legend { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .optional { color: var(--muted); font-weight: 400; }
+    .field input { display: block; width: 100%; padding: 11px 12px; min-height: 45px; border: 1px solid var(--control-border); border-radius: 8px; color: var(--ink); background: white; }
+    .field input::placeholder { color: #81766a; }
+    .field input:disabled { background: #f6f3ee; color: #665e54; }
+    .field [aria-invalid="true"] { border: 2px solid var(--red); }
+    .field-hint { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .field-error { margin: 5px 0 0; font-size: 14px; color: var(--red); }
+    .fulfillment { margin-bottom: 17px; }
+    .fulfillment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .method { display: flex; align-items: center; gap: 7px; padding: 11px 9px; border: 1px solid var(--control-border); border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .method:has(input:checked) { background: var(--brand-soft); border-color: var(--brand); }
+    .method input { margin: 0; width: 17px; height: 17px; accent-color: var(--brand); flex: none; }
+    .method small { display: block; font-size: 12px; color: var(--muted); }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 47px; border: 1px solid transparent; border-radius: 9px; padding: 11px 17px; font-weight: 600; text-decoration: none; }
+    .button-primary { color: white; background: var(--brand); }
+    .button-primary:hover:not(:disabled) { background: var(--brand-dark); }
+    .button-secondary { color: var(--brand-dark); background: white; border-color: var(--control-border); }
+    .button:disabled { background: #ede8e1; color: #766d63; border-color: #d8cec2; }
+    .submit-button { width: 100%; margin-top: 6px; }
+    .checkout-note { margin: 11px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
+    .notice { border: 1px solid var(--border); border-radius: 12px; padding: 16px 19px; margin: 0 0 22px; background: white; }
+    .notice p { margin: 0; }
+    .notice.error { color: var(--red); border-color: #d69a8d; background: var(--red-soft); }
+    .notice.pending { border-color: #c6a56d; background: #fff6e6; color: #644721; }
+    .notice-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 13px; }
+    .cart-warning { color: var(--red); font-size: 14px; background: var(--red-soft); padding: 11px; border-radius: 8px; margin-bottom: 13px; }
+    .load-state { padding: 55px 24px; text-align: center; color: var(--muted); }
+    .spinner { display: inline-block; width: 24px; height: 24px; border: 2px solid #d8c5ad; border-top-color: var(--brand); border-radius: 50%; margin-bottom: 12px; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .mobile-cart { display: none; }
+    .site-footer { margin: 38px auto 0; padding: 25px 0 32px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--border); }
+    .footer-top { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; margin-bottom: 15px; }
+    .site-footer details { max-width: 850px; font-size: 13px; }
+    .site-footer summary { cursor: pointer; font-weight: 600; }
+    .site-footer ul { padding-left: 20px; }
+    .site-footer li { margin: 5px 0; }
+    .confirmation { max-width: 720px; margin: 0 auto; padding: 35px; }
+    .confirmation-mark { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 50%; background: var(--green-soft); color: var(--green); font-size: 25px; margin-bottom: 20px; }
+    .confirmation h1 { font-size: 32px; }
+    .confirmation .order-id { display: inline-block; font-size: 14px; font-weight: 600; background: var(--soft); border-radius: 6px; padding: 6px 10px; margin: 4px 0 22px; }
+    .receipt-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 24px; margin: 0 0 24px; font-size: 15px; }
+    .receipt-meta dt { color: var(--muted); font-size: 13px; }
+    .receipt-meta dd { margin: 2px 0 0; overflow-wrap: anywhere; }
+    .receipt-day { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 17px; }
+    .receipt-day h2 { font: 600 17px/1.3 'Source Sans Pro', sans-serif; margin-bottom: 8px; }
+    .receipt-line { display: flex; justify-content: space-between; gap: 20px; margin: 8px 0; font-size: 15px; }
+    .receipt-line small { display: block; color: var(--muted); }
+    .receipt-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    @media (max-width: 900px) {
+      .shell { width: min(700px, calc(100% - 36px)); }
+      .app-grid { grid-template-columns: 1fr; }
+      .checkout { position: static; }
+      .cart-section, .checkout-form { padding: 23px 25px; }
+      .mobile-cart { display: flex; position: fixed; z-index: 10; bottom: 0; left: 0; right: 0; padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); align-items: center; justify-content: space-between; gap: 18px; background: rgba(255,255,255,.98); border-top: 1px solid var(--border); box-shadow: 0 -5px 24px #302b2508; }
+      .mobile-cart strong { font-size: 20px; }
+      .mobile-cart > div span { color: var(--muted); display: block; font-size: 12px; }
+      body.has-cart { padding-bottom: 90px; }
+    }
+    @media (max-width: 540px) {
+      .shell { width: calc(100% - 28px); }
+      .header-inner { padding: 12px 0; gap: 12px; }
+      .brand { gap: 11px; }
+      .brand img { width: 50px; height: 50px; }
+      .brand-name { font-size: 23px; }
+      .header-contact { display: none; }
+      main { padding-top: 20px; }
+      .intro { align-items: start; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+      .intro h1 { font-size: 28px; margin-bottom: 0; }
+      .week-pill { font-size: 13px; padding: 7px 12px; }
+      .cutoff { display: block; padding: 12px 15px; font-size: 14px; margin-bottom: 20px; }
+      .panel-heading { padding: 20px 18px 17px; }
+      .day-tabs { padding: 0 18px 18px; }
+      .day-tab { flex-basis: 64px; min-width: 64px; }
+      .menu-day-heading { padding: 15px 18px; }
+      .menu-item { margin: 0 18px; padding: 18px 0; }
+      .menu-item h3 { font-size: 18px; }
+      .menu-footer { padding: 14px 18px; }
+      .variant-size { display: block; font-size: 13px; }
+      .cart-section, .checkout-form { padding: 21px 20px; }
+      .confirmation { padding: 25px 21px; }
+      .receipt-meta { grid-template-columns: 1fr; }
+      .receipt-actions .button { flex: 1 1 160px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+    @media print {
+      body { background: white; padding: 0 !important; }
+      .site-header, .intro, .cutoff, .site-footer, .receipt-actions, .mobile-cart, .notice { display: none !important; }
+      .confirmation { max-width: none; box-shadow: none; border: 0; padding: 0; }
+      main { padding: 0; }
+      .shell { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-    <header class="hero">
-        <div class="logo-container">
-            <!-- Logo will appear here if logo.png exists in repo -->
-            <img src="logo.png" id="logo" alt="Aruna's Kitchen" style="display: none;" onerror="this.style.display='none';" onload="this.style.display='block'; document.querySelector('.logo-text').style.display='none';">
-            <div class="logo-text">Aruna's Kitchen</div>
-            <div class="phone-number">📞 +1 248-877-9924</div>
-        </div>
-        <div class="week-header">
-            <div class="week-label" id="weekLabel">Loading menu...</div>
-        </div>
-    </header>
-    
-    <div class="cutoff-banner" id="cutoffBanner">
-        <strong>🍽️</strong>
-        <span id="cutoffMessage">To maintain the quality and flavors, please place orders by <strong>10 PM CST</strong> for the next day.</span>
+  <a class="skip-link" href="#menuHeading">Skip to menu</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#mainContent" aria-label="Aruna's Kitchen — back to top">
+        <img src="https://somanad10.github.io/Kitchen-Orders/logo.png" alt="" width="76" height="76" id="brandLogo">
+        <div class="brand-name">Aruna's Kitchen</div>
+      </a>
+      <div class="header-contact"><span>A question about your order?</span><a href="tel:+12488779924">+1 248-877-9924</a></div>
+    </div>
+  </header>
+
+  <main class="shell" id="mainContent">
+    <div id="shopIntro">
+      <div class="intro"><h1>Order for the week</h1><div class="week-pill" id="weekLabel">This week's menu</div></div>
+      <div class="cutoff" id="cutoffNotice"><span id="cutoffText">Order by 10 PM Central for the next day. Pickup or $2 delivery per day.</span></div>
+    </div>
+    <div id="globalNotice" class="notice error" role="alert" tabindex="-1" hidden></div>
+    <div id="pendingNotice" class="notice pending" role="status" hidden><p id="pendingMessage"></p><div class="notice-actions"><button type="button" class="button button-primary" id="retryOrder">Retry the same order</button><a href="tel:+12488779924" class="button button-secondary">Call the kitchen</a></div></div>
+    <div id="loadingState" class="panel load-state" role="status"><span class="spinner" aria-hidden="true"></span><p>Loading this week's menu…</p></div>
+    <div id="menuLoadError" class="panel load-state" hidden><h2>Our menu isn't available right now.</h2><p id="menuLoadMessage">Please try again in a moment, or call the kitchen.</p><button type="button" class="button button-primary" id="reloadMenu">Try again</button> <a href="tel:+12488779924" class="button button-secondary">Call the kitchen</a></div>
+
+    <div class="app-grid" id="shop" hidden>
+      <section class="panel menu-panel" aria-labelledby="menuHeading">
+        <div class="panel-heading"><h2 id="menuHeading" tabindex="-1">This week's menu</h2><p>Pick a day, then add your favorites.</p></div>
+        <div class="day-tabs" id="dayTabs" role="tablist" aria-label="Menu day"></div>
+        <div id="menuPanel" role="tabpanel" tabindex="0"><div class="menu-day-heading"><div><h3 id="dayHeading"></h3><p id="dayDescription"></p></div><span class="day-label" id="dayStatus"></span></div><div id="menuItems"></div></div>
+        <div class="menu-footer">Food allergies or dietary restrictions? <a href="tel:+12488779924">Please call us before ordering.</a></div>
+      </section>
+
+      <aside class="panel checkout" id="checkout" aria-labelledby="cartHeading">
+        <section class="cart-section"><div class="cart-title"><h2 id="cartHeading" tabindex="-1">Your order</h2><span class="item-count" id="cartCount">0 items</span></div><div id="cartContents"></div><div id="cartWarning" class="cart-warning" hidden></div><div id="cartTotals" hidden></div></section>
+        <form class="checkout-form" id="orderForm" novalidate>
+          <h2>Your details</h2>
+          <fieldset id="customerFields"><legend class="sr-only">Contact and fulfillment details</legend>
+            <div class="field"><label for="customerName">Name</label><input id="customerName" name="name" autocomplete="name" required maxlength="120" placeholder="Your full name"><p class="field-error" id="customerNameError" hidden></p></div>
+            <div class="field"><label for="customerPhone">Phone number</label><input id="customerPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" required maxlength="20" placeholder="(555) 123-4567"><p class="field-error" id="customerPhoneError" hidden></p></div>
+            <div class="field"><label for="customerEmail">Email <span class="optional">(optional)</span></label><input id="customerEmail" name="email" type="email" autocomplete="email" maxlength="254" placeholder="For your order confirmation" aria-describedby="emailHint"><p class="field-hint" id="emailHint">We'll email a receipt if you provide one.</p><p class="field-error" id="customerEmailError" hidden></p></div>
+            <fieldset class="fulfillment"><legend>How would you like your order?</legend><div class="fulfillment-options"><label class="method"><input type="radio" name="fulfillment" value="Pickup" checked><span>Pickup<small>No delivery fee</small></span></label><label class="method"><input type="radio" name="fulfillment" value="Delivery"><span>Delivery<small>$2 per day</small></span></label></div></fieldset>
+            <div class="field" id="addressField" hidden><label for="deliveryAddress">Delivery address</label><input id="deliveryAddress" name="deliveryAddress" autocomplete="street-address" maxlength="500" placeholder="Street, city, state and ZIP" disabled><p class="field-error" id="deliveryAddressError" hidden></p></div>
+          </fieldset>
+          <button class="button button-primary submit-button" id="submitOrder" type="submit" disabled>Choose your dishes</button><p class="checkout-note">No payment is collected on this form.</p>
+        </form>
+      </aside>
     </div>
 
-    <main class="container">
-        <div id="errorMessage" class="message error hidden"></div>
-        <div id="successMessage" class="message success hidden"></div>
-        
-        <div id="loadingIndicator" class="loading">
-            <div class="spinner"></div>
-            <p>Loading menu...</p>
-        </div>
-        
-        <div id="formContainer" class="hidden">
-            <section class="section-card">
-                <h2 class="section-title">This Week's Menu</h2>
-                <div id="menuDisplay"></div>
-            </section>
-            
-            <section class="section-card">
-                <h2 class="section-title">Your Order</h2>
-                <div id="daysContainer"></div>
-                <button type="button" class="add-day-btn" id="addDayBtn">+ Add Another Day</button>
-            </section>
+    <section id="confirmation" class="panel confirmation" aria-labelledby="confirmationHeading" hidden></section>
+    <p class="sr-only" id="cartAnnouncement" role="status" aria-live="polite" aria-atomic="true"></p>
+  </main>
+  <footer class="shell site-footer"><div class="footer-top"><span>Aruna's Kitchen · Freshly cooked, homestyle flavors</span><a href="tel:+12488779924">+1 248-877-9924</a></div><details><summary>Ordering information & policies</summary><ul><li>All orders are subject to availability and must be placed by 10 PM Central for next-day fulfillment.</li><li>Prices and menu items may change without notice.</li><li>Delivery times are estimates and may vary based on location and order volume.</li><li>Please inform us of any food allergies or dietary restrictions when placing your order.</li><li>We reserve the right to cancel or modify orders in case of unforeseen circumstances.</li><li>Payment terms and cancellation policies apply. Please contact us for details.</li><li>By placing an order, you agree to our terms of service and privacy policy.</li></ul></details></footer>
+  <div class="mobile-cart" id="mobileCart" hidden><div><span id="mobileCartCount"></span><strong id="mobileCartTotal"></strong></div><button type="button" class="button button-primary" id="reviewOrder">Review order <span aria-hidden="true">→</span></button></div>
 
-            <section class="section-card">
-                <h2 class="section-title">Your Information</h2>
-                <form id="orderForm">
-                    <div class="form-group">
-                        <label class="form-label">Name *</label>
-                        <input type="text" id="customerName" class="form-input" placeholder="Enter your name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Phone Number *</label>
-                        <input type="tel" id="customerPhone" class="form-input" placeholder="(555) 123-4567" required inputmode="tel" autocomplete="tel" maxlength="18">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Email (Optional - for order receipt)</label>
-                        <input type="email" id="customerEmail" class="form-input" placeholder="your.email@example.com">
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem; font-style: italic;">
-                            💌 If provided, we'll send you an order confirmation
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Fulfillment Method *</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" name="fulfillment" id="fulfillmentPickup" value="Pickup" checked>
-                                <label for="fulfillmentPickup">Pickup</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" name="fulfillment" id="fulfillmentDelivery" value="Delivery">
-                                <label for="fulfillmentDelivery">Delivery ($2/day)</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="delivery-address-container" id="deliveryAddressContainer">
-                        <div class="form-group">
-                            <label class="form-label">Delivery Address *</label>
-                            <input type="text" id="deliveryAddress" class="form-input" placeholder="123 Main St, City, State ZIP">
-                            <div class="delivery-note">$2 delivery fee per day selected</div>
-                        </div>
-                    </div>
-                </form>
-            </section>
-            
-            
-            
-            <section class="section-card">
-                <h2 class="section-title">Order Summary</h2>
-                <div class="summary-content" id="summaryContent">
-                    <p style="text-align: center; color: var(--text-muted);">Add items to see your order summary</p>
-                </div>
-            </section>
-            
-            <button type="submit" class="submit-btn" id="submitBtn">Place Order</button>
-        </div>
-        
-        <div id="confirmationContainer" class="hidden">
-            <!-- Confirmation will appear here -->
-        </div>
-    </main>
-    
-    <footer class="footer">
-        <p>🍽️ Freshly cooked • Homestyle flavors</p>
-        <p style="margin-top: 0.5rem;">Aruna's Kitchen 2026</p>
-        
-        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-light); font-size: 0.75rem; color: #999; line-height: 1.6;">
-            <p><strong>Disclaimer:</strong></p>
-            <p style="margin-top: 0.5rem;">
-                • All orders are subject to availability and must be placed by 10 PM for next-day fulfillment.<br>
-                • Prices and menu items may change without notice.<br>
-                • Delivery times are estimates and may vary based on location and order volume.<br>
-                • Please inform us of any food allergies or dietary restrictions when placing your order.<br>
-                • We reserve the right to cancel or modify orders in case of unforeseen circumstances.<br>
-                • Payment terms and cancellation policies apply. Please contact us for details.<br>
-                • By placing an order, you agree to our terms of service and privacy policy.
-            </p>
-        </div>
-    </footer>
-    
-    <script>
+  <script>
+    'use strict';
 
-        // Format prices safely (handles blank/undefined prices)
-        function formatPriceLabel(primary, fallback) {
-            const v = (primary ?? fallback);
-            const n = Number(v);
-            if (v === null || v === undefined || v === '' || Number.isNaN(n)) return 'Price TBD';
-            return `$${n.toFixed(2)}`;
+    // Keep the deployed Apps Script contract unchanged.
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjZLNgPAxmeQASz73FxF1XlsGKS7bPzdCBDzYVlhtuVmRWisKN1bk88PCaOCkEyRLEPQ/exec';
+    const DELIVERY_FEE_PER_DAY = 2;
+    const ORDER_CUTOFF_HOUR = 22;
+    const TIME_ZONE = 'America/Chicago';
+    const PENDING_STORAGE_KEY = 'aruna-kitchen-pending-v1';
+    const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const state = { menu: [], weekLabel: '', monday: '', selectedDay: '', cart: new Map(), fulfillment: 'Pickup', pending: null, submitting: false, confirmed: false, availabilityToken: '' };
+    const byId = id => document.getElementById(id);
+    const money = cents => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+
+    function centralParts(date = new Date()) {
+      return Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(date).map(part => [part.type, part.value]));
+    }
+
+    function addDays(key, number) {
+      const date = new Date(key + 'T12:00:00Z');
+      date.setUTCDate(date.getUTCDate() + number);
+      return date.toISOString().slice(0, 10);
+    }
+
+    function parseWeekLabel(label) {
+      const match = /^Week of ([A-Za-z]+) (\d{1,2}), (\d{4})$/.exec(String(label).trim());
+      if (!match) return '';
+      const month = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].indexOf(match[1].slice(0, 3).toLowerCase());
+      if (month < 0) return '';
+      const date = new Date(Date.UTC(Number(match[3]), month, Number(match[2]), 12));
+      if (date.getUTCMonth() !== month || date.getUTCDate() !== Number(match[2]) || date.getUTCDay() !== 1) return '';
+      return date.toISOString().slice(0, 10);
+    }
+
+    function normalizeDay(value) {
+      const short = String(value || '').trim().toLowerCase().slice(0, 3);
+      return DAYS.find(day => day.toLowerCase().startsWith(short)) && short.length === 3 ? DAYS.find(day => day.toLowerCase().startsWith(short)) : '';
+    }
+
+    function menuDate(day, monday = state.monday) {
+      return monday && DAYS.includes(day) ? addDays(monday, DAYS.indexOf(day)) : '';
+    }
+
+    function dateLabel(day, options = { weekday: 'short', month: 'short', day: 'numeric' }, monday = state.monday) {
+      const key = menuDate(day, monday);
+      return key ? new Intl.DateTimeFormat('en-US', { ...options, timeZone: 'UTC' }).format(new Date(key + 'T12:00:00Z')) : day;
+    }
+
+    function deadlineLabel(day, monday = state.monday) {
+      const target = menuDate(day, monday);
+      if (!target) return '';
+      const deadline = new Date(addDays(target, -1) + 'T12:00:00Z');
+      return new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(deadline) + ' at 10 PM Central';
+    }
+
+    function dayAvailability(day, monday = state.monday, now = new Date()) {
+      const parts = centralParts(now);
+      const today = `${parts.year}-${parts.month}-${parts.day}`;
+      const target = menuDate(day, monday);
+      if (!target) return { available: false, reason: 'Date unavailable' };
+      if (target <= today) return { available: false, reason: target === today ? 'Same-day ordering is closed' : 'Ordering has closed' };
+      if (Number(parts.hour) >= ORDER_CUTOFF_HOUR && target === addDays(today, 1)) return { available: false, reason: 'The 10 PM cutoff has passed' };
+      return { available: true, reason: 'Available to order' };
+    }
+
+    function normalizeMenu(rows) {
+      const entries = new Map();
+      (Array.isArray(rows) ? rows : []).forEach(row => {
+        const day = normalizeDay(row.DayOfWeek || row.day || row.Day);
+        const itemName = String(row.ItemName || row.item || row.Item || '').trim();
+        const size = String(row.Size ?? row.size ?? '').trim();
+        const rawPrice = row.Price ?? row.price;
+        const price = rawPrice !== '' && rawPrice !== null && rawPrice !== undefined ? Number(rawPrice) : NaN;
+        if (!day || !itemName) return;
+        const key = JSON.stringify([day, itemName, size]);
+        const cents = Number.isFinite(price) && price >= 0 ? Math.round(price * 100) : null;
+        if (entries.has(key)) {
+          if (entries.get(key).cents !== cents) entries.get(key).cents = null;
+          return;
         }
+        entries.set(key, { id: 'dish-' + entries.size, day, itemName, size, cents });
+      });
+      return [...entries.values()].sort((a, b) => DAYS.indexOf(a.day) - DAYS.indexOf(b.day));
+    }
 
-        // ===================================
-        // CONFIGURATION
-        // ===================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjZLNgPAxmeQASz73FxF1XlsGKS7bPzdCBDzYVlhtuVmRWisKN1bk88PCaOCkEyRLEPQ/exec';
-        const DELIVERY_FEE_PER_DAY = 2.00;
-        const ORDER_CUTOFF_HOUR = 22; // 10 PM
-        
-        // ===================================
-        // GLOBAL STATE
-        // ===================================
-        let menuData = [];
-        let activeWeek = '';
-        let dayCounter = 0;
-        let isSubmitting = false;
-        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        
-        // ===================================
-        // INITIALIZATION
-        // ===================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('Initializing order form...');
-            
-            // Check if deadline has passed
-            checkOrderDeadline();
-            
-            await loadMenu();
-            
-            attachPhoneValidation();
-addDay();
-            setupEventListeners();
+    function selectedLines() {
+      // A pending order always displays its original dishes and prices, even
+      // when a reload retrieves a newer menu or the next week's menu.
+      if (state.pending) return state.pending.payload.orderLines.map((line, index) => ({ ...line, id: 'pending-' + index, cents: Math.round(line.unitPrice * 100) }));
+      return [...state.cart].map(([id, quantity]) => ({ ...state.menu.find(item => item.id === id), quantity })).filter(line => line.quantity > 0 && line.id);
+    }
+
+    function totalsFor(lines, fulfillment = state.fulfillment) {
+      const subtotal = lines.reduce((sum, line) => sum + line.cents * line.quantity, 0);
+      const days = new Set(lines.map(line => line.day)).size;
+      const fee = fulfillment === 'Delivery' ? days * DELIVERY_FEE_PER_DAY * 100 : 0;
+      return { subtotal, days, fee, total: subtotal + fee, quantity: lines.reduce((sum, line) => sum + line.quantity, 0) };
+    }
+
+    function showNotice(message, focus = false) {
+      const notice = byId('globalNotice');
+      notice.textContent = message;
+      notice.hidden = !message;
+      if (focus && message) notice.focus();
+    }
+
+    function renderDays() {
+      const days = DAYS.filter(day => state.menu.some(item => item.day === day));
+      byId('dayTabs').innerHTML = days.map(day => {
+        const available = dayAvailability(day).available;
+        return `<button type="button" class="day-tab${available ? '' : ' is-closed'}" id="tab-${day}" role="tab" aria-selected="${day === state.selectedDay}" aria-controls="menuPanel" tabindex="${day === state.selectedDay ? '0' : '-1'}" data-day="${day}"><strong>${day.slice(0, 3)}</strong><span>${escapeHTML(dateLabel(day, { month: 'short', day: 'numeric' }))}</span><span class="day-state">${available ? 'Order' : 'Closed'}</span></button>`;
+      }).join('');
+    }
+
+    function renderMenu() {
+      renderDays();
+      const day = state.selectedDay;
+      const availability = dayAvailability(day);
+      byId('menuPanel').setAttribute('aria-labelledby', 'tab-' + day);
+      byId('dayHeading').textContent = dateLabel(day, { weekday: 'long', month: 'long', day: 'numeric' });
+      byId('dayDescription').textContent = availability.available ? 'Order by ' + deadlineLabel(day) + '.' : availability.reason + '. Select another day to order.';
+      byId('dayStatus').textContent = availability.available ? 'Open' : 'Closed';
+      const groups = new Map();
+      state.menu.filter(item => item.day === day).forEach(item => {
+        if (!groups.has(item.itemName)) groups.set(item.itemName, []);
+        groups.get(item.itemName).push(item);
+      });
+      byId('menuItems').innerHTML = [...groups].map(([name, variants]) => `<article class="menu-item"><h3>${escapeHTML(name)}</h3>${variants.map(item => {
+        const canOrder = availability.available && item.cents !== null && !!item.size;
+        const quantity = state.cart.get(item.id) || 0;
+        return `<div class="menu-variant${quantity ? ' is-selected' : ''}" data-variant="${item.id}"><div class="variant-copy"><span class="variant-size">${escapeHTML(item.size || 'Size unavailable')}</span><span class="variant-price">${item.cents === null ? 'Price to be confirmed' : money(item.cents)}</span></div>${canOrder ? `<div class="stepper"><button type="button" data-adjust="-1" data-id="${item.id}" aria-label="Remove one ${escapeHTML(name)} (${escapeHTML(item.size)}) for ${day}">−</button><input id="quantity-${item.id}" data-quantity="${item.id}" type="number" min="0" max="99" step="1" value="${quantity}" inputmode="numeric" aria-label="Quantity of ${escapeHTML(name)} (${escapeHTML(item.size)}) for ${day}"><button type="button" data-adjust="1" data-id="${item.id}" aria-label="Add one ${escapeHTML(name)} (${escapeHTML(item.size)}) for ${day}">+</button></div>` : `<span class="not-orderable">${availability.available ? 'Unavailable' : 'Closed'}</span>`}</div>`;
+      }).join('')}</article>`).join('');
+      updateQuantityControls();
+    }
+
+    function updateQuantityControls() {
+      document.querySelectorAll('[data-variant]').forEach(row => {
+        const id = row.dataset.variant;
+        const quantity = state.cart.get(id) || 0;
+        row.classList.toggle('is-selected', quantity > 0);
+        const input = row.querySelector('input');
+        if (!input) return;
+        input.value = quantity;
+        input.disabled = !!state.pending || state.submitting;
+        row.querySelector('[data-adjust="-1"]').disabled = input.disabled || quantity === 0;
+        row.querySelector('[data-adjust="1"]').disabled = input.disabled || quantity >= 99;
+      });
+    }
+
+    function changeQuantity(id, quantity) {
+      if (state.pending || state.submitting) return;
+      const item = state.menu.find(entry => entry.id === id);
+      if (!item || !dayAvailability(item.day).available || item.cents === null || !item.size) return;
+      if (!Number.isInteger(quantity) || quantity < 0 || quantity > 99) {
+        byId('cartAnnouncement').textContent = 'Please use a whole quantity from 0 to 99.';
+        updateQuantityControls();
+        return;
+      }
+      if (quantity) state.cart.set(id, quantity); else state.cart.delete(id);
+      updateQuantityControls();
+      renderCart();
+      byId('cartAnnouncement').textContent = `${quantity} ${item.itemName} for ${item.day}. Your total is ${money(totalsFor(selectedLines()).total)}.`;
+    }
+
+    function renderCart() {
+      const lines = selectedLines();
+      const totals = totalsFor(lines);
+      const cartMonday = state.pending ? parseWeekLabel(state.pending.payload.weekLabel) : state.monday;
+      const expired = lines.some(line => !dayAvailability(line.day).available);
+      byId('cartHeading').textContent = state.pending ? 'Your submitted order' : 'Your order';
+      byId('cartCount').textContent = `${totals.quantity} ${totals.quantity === 1 ? 'item' : 'items'}`;
+      byId('cartContents').innerHTML = lines.length ? DAYS.map(day => {
+        const group = lines.filter(line => line.day === day);
+        return group.length ? `<div class="cart-day">${escapeHTML(dateLabel(day, { weekday: 'short', month: 'short', day: 'numeric' }, cartMonday))}</div>${group.map(line => `<div class="cart-row${!state.pending && !dayAvailability(day).available ? ' expired' : ''}"><div>${line.quantity} × ${escapeHTML(line.itemName)}<small>${escapeHTML(line.size)}</small></div><span class="cart-amount">${money(line.cents * line.quantity)}</span><button type="button" class="remove-button" data-remove="${line.id}" aria-label="Remove ${escapeHTML(line.itemName)} for ${day}" ${state.pending ? 'disabled' : ''}>×</button></div>`).join('')}` : '';
+      }).join('') : '<div class="empty-cart"><svg width="35" height="35" viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M8 15h24l-2 18H10L8 15Z" stroke="currentColor" stroke-width="1.5"/><path d="M14 16v-5a6 6 0 0 1 12 0v5" stroke="currentColor" stroke-width="1.5"/></svg>Choose dishes from the menu<br>to start your order.</div>';
+      byId('cartTotals').hidden = !lines.length;
+      byId('cartTotals').innerHTML = `<div class="totals"><div class="total-line"><span>Food subtotal</span><span>${money(totals.subtotal)}</span></div><div class="total-line"><span>${state.fulfillment === 'Delivery' ? `Delivery · ${totals.days} ${totals.days === 1 ? 'day' : 'days'} × $2` : 'Pickup'}</span><span>${totals.fee ? money(totals.fee) : 'No fee'}</span></div><div class="total-line grand"><span>Total</span><span>${money(totals.total)}</span></div></div>`;
+      byId('cartWarning').hidden = !expired || !!state.pending;
+      byId('cartWarning').textContent = 'Ordering has closed for an item in your cart. Remove it to continue with the remaining days.';
+      const button = byId('submitOrder');
+      button.disabled = !lines.length || expired || state.submitting || !!state.pending;
+      button.textContent = state.submitting ? 'Confirming your order…' : state.pending ? 'Order awaiting confirmation' : lines.length ? `Place order · ${money(totals.total)}` : 'Choose your dishes';
+      byId('mobileCart').hidden = !lines.length || state.confirmed || !!state.pending;
+      document.body.classList.toggle('has-cart', lines.length > 0 && !state.confirmed && !state.pending);
+      byId('mobileCartCount').textContent = `${totals.quantity} ${totals.quantity === 1 ? 'item' : 'items'} in your order`;
+      byId('mobileCartTotal').textContent = money(totals.total);
+    }
+
+    function updateFulfillment() {
+      state.fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
+      const delivery = state.fulfillment === 'Delivery';
+      byId('addressField').hidden = !delivery;
+      byId('deliveryAddress').required = delivery;
+      byId('deliveryAddress').disabled = !delivery || !!state.pending;
+      renderCart();
+    }
+
+    function clearFieldErrors() {
+      ['customerName', 'customerPhone', 'customerEmail', 'deliveryAddress'].forEach(id => {
+        byId(id).removeAttribute('aria-invalid');
+        byId(id).removeAttribute('aria-describedby');
+        byId(id + 'Error').hidden = true;
+      });
+      byId('customerEmail').setAttribute('aria-describedby', 'emailHint');
+    }
+
+    function validateDetails() {
+      clearFieldErrors();
+      let first = null;
+      function invalid(id, message) {
+        const field = byId(id);
+        field.setAttribute('aria-invalid', 'true');
+        field.setAttribute('aria-describedby', id + 'Error' + (id === 'customerEmail' ? ' emailHint' : ''));
+        byId(id + 'Error').textContent = message;
+        byId(id + 'Error').hidden = false;
+        if (!first) first = field;
+      }
+      if (!byId('customerName').value.trim()) invalid('customerName', 'Please enter your name.');
+      if (byId('customerPhone').value.replace(/\D/g, '').length !== 10) invalid('customerPhone', 'Please enter a 10-digit US phone number.');
+      if (byId('customerEmail').value.trim() && !byId('customerEmail').validity.valid) invalid('customerEmail', 'Please enter a valid email address, or leave this blank.');
+      if (state.fulfillment === 'Delivery' && !byId('deliveryAddress').value.trim()) invalid('deliveryAddress', 'Please enter your full delivery address.');
+      if (first) {
+        showNotice('Please check the highlighted details before placing your order.');
+        first.focus();
+        return false;
+      }
+      return true;
+    }
+
+    function makeRequestId() {
+      return window.crypto && typeof window.crypto.randomUUID === 'function' ? window.crypto.randomUUID() : `req-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+    }
+
+    function buildPayload() {
+      const lines = selectedLines();
+      const totals = totalsFor(lines);
+      return { action: 'submitOrder', clientRequestId: makeRequestId(), weekLabel: state.weekLabel,
+        name: byId('customerName').value.trim(), phone: byId('customerPhone').value.trim(),
+        email: byId('customerEmail').value.trim(), fulfillment: state.fulfillment,
+        deliveryAddress: state.fulfillment === 'Delivery' ? byId('deliveryAddress').value.trim() : '',
+        subtotal: totals.subtotal / 100, deliveryFee: totals.fee / 100, total: totals.total / 100,
+        orderLines: lines.map(line => ({ day: line.day, itemName: line.itemName, size: line.size, quantity: line.quantity, unitPrice: line.cents / 100, lineTotal: line.cents * line.quantity / 100 })) };
+    }
+
+    function rememberPending() {
+      // Session storage is limited to this browser tab; clear it after confirmation.
+      try { if (state.pending) sessionStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(state.pending)); else sessionStorage.removeItem(PENDING_STORAGE_KEY); } catch (_) { /* The in-memory retry remains available when storage is blocked. */ }
+    }
+
+    function setPendingUI(message = '') {
+      byId('customerFields').disabled = !!state.pending;
+      byId('deliveryAddress').disabled = state.fulfillment !== 'Delivery' || !!state.pending;
+      byId('pendingNotice').hidden = !state.pending || state.submitting;
+      byId('pendingMessage').textContent = message || 'We could not confirm the result of your submission. Retry the same order safely, or call the kitchen before starting another order.';
+      byId('retryOrder').disabled = state.submitting;
+      byId('orderForm').setAttribute('aria-busy', String(state.submitting));
+      if (state.submitting) byId('cartAnnouncement').textContent = 'Confirming your order. Please wait.';
+      updateQuantityControls();
+      renderCart();
+    }
+
+    async function requestJSON(url, options = {}, timeout = 45000) {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), timeout);
+      try {
+        const response = await fetch(url, { ...options, signal: controller.signal });
+        if (!response.ok) throw new Error('Unexpected HTTP response');
+        return await response.json();
+      } finally { window.clearTimeout(timer); }
+    }
+
+    async function submitPending() {
+      if (!state.pending || state.submitting) return;
+      state.submitting = true;
+      showNotice('');
+      setPendingUI();
+      let uncertainMessage = '';
+      try {
+        const result = await requestJSON(SCRIPT_URL, { method: 'POST', body: new URLSearchParams({ action: 'submitOrder', payload: JSON.stringify(state.pending.payload) }) });
+        if (result && result.success === true && !result.error && typeof result.orderId === 'string' && /^ORD-[A-F0-9]{8}$/.test(result.orderId)) {
+          const payload = state.pending.payload;
+          state.pending = null;
+          rememberPending();
+          showConfirmation(payload, result.orderId, result.orderStatus, result.duplicate === true);
+          return;
+        }
+        if (result && typeof result.error === 'string' && result.error) {
+          if (!result.orderId && result.retryable === false && ['MENU_CHANGED', 'INVALID_ORDER', 'ORDER_CLOSED'].includes(result.errorCode)) {
+            const rejected = state.pending.payload;
+            state.pending = null;
+            rememberPending();
+            showNotice(result.error, true);
+            if (['MENU_CHANGED', 'ORDER_CLOSED'].includes(result.errorCode)) await loadMenu(true, rejected.orderLines.map(line => ({ ...line, cents: Math.round(line.unitPrice * 100) })), rejected.weekLabel);
+          } else {
+            if (result.orderId) state.pending.reference = result.orderId;
+            uncertainMessage = `${result.error} Retry this same order to check it, or call the kitchen${result.orderId ? ' with your reference' : ''}.`;
+          }
+        } else throw new Error('Unrecognized response');
+      } catch (_) {
+        uncertainMessage = 'We could not confirm whether your order was received. Retry this same order before placing another, or call the kitchen.';
+      } finally {
+        state.submitting = false;
+        rememberPending();
+        setPendingUI(uncertainMessage);
+      }
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      if (state.submitting || state.pending) return;
+      refreshAvailability();
+      const lines = selectedLines();
+      if (!lines.length) { showNotice('Choose at least one dish from the menu.', true); return; }
+      if (lines.some(line => !dayAvailability(line.day).available)) { showNotice('Ordering has closed for a selected day. Remove those items before continuing.', true); return; }
+      if (!validateDetails()) return;
+      state.pending = { payload: buildPayload(), createdAt: new Date().toISOString() };
+      rememberPending();
+      submitPending();
+    }
+
+    function showConfirmation(payload, orderId, orderStatus = 'Pending', duplicate = false) {
+      state.confirmed = true;
+      byId('shop').hidden = true;
+      byId('shopIntro').hidden = true;
+      byId('pendingNotice').hidden = true;
+      byId('menuLoadError').hidden = true;
+      byId('loadingState').hidden = true;
+      const receipt = byId('confirmation');
+      receipt.replaceChildren();
+      function element(tag, text, className) {
+        const node = document.createElement(tag);
+        if (text !== undefined) node.textContent = text;
+        if (className) node.className = className;
+        return node;
+      }
+      const cancelled = ['cancelled', 'canceled'].includes(String(orderStatus).trim().toLowerCase());
+      const mark = element('div', cancelled ? '!' : '✓', 'confirmation-mark');
+      if (cancelled) { mark.style.background = 'var(--red-soft)'; mark.style.color = 'var(--red)'; }
+      receipt.append(mark);
+      const heading = element('h1', cancelled ? 'This order was cancelled.' : duplicate ? 'Your order is already saved.' : 'Your order is confirmed.');
+      heading.id = 'confirmationHeading'; heading.tabIndex = -1;
+      receipt.append(heading, element('p', cancelled ? 'Your original order was found, but it is marked cancelled. Please contact the kitchen for help.' : duplicate ? 'We found your original order. No duplicate order was created.' : 'Thank you. Your order details are below.'), element('div', 'Order ID: ' + orderId, 'order-id'));
+      const meta = element('dl', undefined, 'receipt-meta');
+      [['Customer', payload.name], ['Phone', payload.phone], ['Week', payload.weekLabel], ['Fulfillment', payload.fulfillment], ['Order status', String(orderStatus || 'Pending')], ...(payload.deliveryAddress ? [['Delivery address', payload.deliveryAddress]] : [])].forEach(([label, value]) => {
+        const pair = element('div'); pair.append(element('dt', label), element('dd', value)); meta.append(pair);
+      });
+      receipt.append(meta);
+      const monday = parseWeekLabel(payload.weekLabel);
+      DAYS.forEach(day => {
+        const lines = payload.orderLines.filter(line => line.day === day);
+        if (!lines.length) return;
+        const group = element('section', undefined, 'receipt-day');
+        group.append(element('h2', dateLabel(day, { weekday: 'long', month: 'long', day: 'numeric' }, monday)));
+        lines.forEach(line => {
+          const row = element('div', undefined, 'receipt-line');
+          const detail = element('div', `${line.quantity} × ${line.itemName}`);
+          detail.append(element('small', `${line.size} · ${money(Math.round(line.unitPrice * 100))} each`));
+          row.append(detail, element('strong', money(Math.round(line.lineTotal * 100)))); group.append(row);
         });
-        
-        // ===================================
-        // CHECK ORDER DEADLINE
-        // ===================================
-        
-        function checkOrderDeadline() {
-            // Use America/Chicago (CST/CDT) time for cutoff logic.
-            const cutoffBanner = document.getElementById('cutoffBanner');
-            const cutoffMessage = document.getElementById('cutoffMessage');
-
-            if (!cutoffBanner) return;
-
-            const setMsg = (html) => {
-                if (cutoffMessage) cutoffMessage.innerHTML = html;
-                else cutoffBanner.innerHTML = `<strong>🍽️</strong> ${html}`;
-            };
-
-            // If menu hasn't loaded yet, don't decide availability.
-            if (!Array.isArray(menuData) || menuData.length === 0) {
-                cutoffBanner.style.display = 'none';
-                return;
-            }
-
-            const { hour, minute } = getCSTParts(new Date());
-            const availableDays = getAvailableDays();
-
-            // If there are NO orderable days left, then the week is closed for online ordering.
-            if (availableDays.length === 0) {
-                cutoffBanner.style.display = 'block';
-                setMsg('🍽️ ⏰ Online ordering is closed for the remaining days this week. Please check back next week for the new menu.');
-                cutoffBanner.style.background = '#fff7ed';
-                cutoffBanner.style.color = '#9a3412';
-                cutoffBanner.style.borderBottom = '2px solid #f97316';
-                return;
-            }
-
-            // After 10:00 PM CST/CDT, only TOMORROW becomes unavailable (rest of week stays available)
-            const afterCutoff = (hour > ORDER_CUTOFF_HOUR) || (hour === ORDER_CUTOFF_HOUR && minute >= 0);
-
-            cutoffBanner.style.display = 'block';
-
-            if (afterCutoff) {
-                setMsg('🌙 It\'s after <strong>10:00 PM CST</strong>. Ordering for <strong>tomorrow</strong> is now closed. You can still place orders for later days.');
-                cutoffBanner.style.background = '#fffbeb';
-                cutoffBanner.style.color = '#92400e';
-                cutoffBanner.style.borderBottom = '2px solid #f59e0b';
-            } else {
-                setMsg('To maintain the quality and flavors, please place orders by <strong>10 PM CST</strong> for the next day.');
-                cutoffBanner.style.background = '#FFF7E6';
-                cutoffBanner.style.color = '#7A4A00';
-                cutoffBanner.style.borderBottom = '1px solid #F3D7A5';
-            }
-        }
-
-
-        // ===================================
-        // MENU LOADING
-        // ===================================
-        async function loadMenu() {
-            showLoading(true);
-            try {
-                console.log('Fetching menu from:', SCRIPT_URL);
-                const response = await fetch(`${SCRIPT_URL}?action=getMenu`);
-                const data = await response.json();
-                
-                console.log('Menu response:', data);
-                
-                if (data.error) {
-                    showError(data.error);
-                    return;
-                }
-                
-                menuData = data.menu || [];
-                activeWeek = data.weekLabel || 'This Week';
-
-                // Re-evaluate cutoff banner now that menu is loaded
-                checkOrderDeadline();
-                
-                console.log(`Menu loaded: ${menuData.length} items`);
-                console.log('Sample item:', menuData[0]);
-                
-                document.getElementById('weekLabel').textContent = activeWeek;
-                displayMenu();
-                showLoading(false);
-                document.getElementById('formContainer').classList.remove('hidden');
-            } catch (error) {
-                console.error('Menu load error:', error);
-                showError('Failed to load menu. Please confirm the Apps Script web app is deployed and accessible.');
-                showLoading(false);
-            }
-        }
-
-function normalizeDayLabel(dayRaw) {
-    if (!dayRaw) return '';
-    const s = String(dayRaw).trim();
-    if (!s) return '';
-    const lower = s.toLowerCase();
-
-    // Accept common abbreviations
-    const map = {
-        'mon': 'Monday', 'monday': 'Monday',
-        'tue': 'Tuesday', 'tues': 'Tuesday', 'tuesday': 'Tuesday',
-        'wed': 'Wednesday', 'weds': 'Wednesday', 'wednesday': 'Wednesday',
-        'thu': 'Thursday', 'thur': 'Thursday', 'thurs': 'Thursday', 'thursday': 'Thursday',
-        'fri': 'Friday', 'friday': 'Friday',
-        'sat': 'Saturday', 'saturday': 'Saturday',
-        'sun': 'Sunday', 'sunday': 'Sunday'
-    };
-
-    if (map[lower]) return map[lower];
-
-    // Fallback: Title Case
-    return lower.charAt(0).toUpperCase() + lower.slice(1);
-}
-
-
-function displayMenu() {
-            const menuDisplay = document.getElementById('menuDisplay');
-            
-            // Group menu by day
-            const menuByDay = {};
-            menuData.forEach(item => {
-                const day = normalizeDayLabel(item.DayOfWeek || item.day);
-                if (!day) {
-                    console.warn('Item missing day:', item);
-                    return;
-                }
-                
-                if (!menuByDay[day]) {
-                    menuByDay[day] = {};
-                }
-                
-                const itemName = item.ItemName || item.item;
-                if (!menuByDay[day][itemName]) {
-                    menuByDay[day][itemName] = [];
-                }
-                
-                menuByDay[day][itemName].push(item);
-            });
-            
-            console.log('Menu grouped by day:', menuByDay);
-            
-            menuDisplay.innerHTML = '';
-            
-            // Create day tabs with dates
-            const dayTabs = document.createElement('div');
-            dayTabs.className = 'menu-day-tabs';
-            dayTabs.style.cssText = 'display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-warm); padding-bottom: 0.5rem;';
-            
-            // Get dates for each day
-            const dayDates = {};
-            daysOfWeek.forEach(day => {
-                dayDates[day] = getDateForDayOfWeek(day);
-            });
-            
-            let firstDaySet = false;
-            
-            daysOfWeek.forEach((day, index) => {
-                if (menuByDay[day]) {
-                    const tabBtn = document.createElement('button');
-                    tabBtn.className = 'day-tab-btn';
-                    tabBtn.setAttribute('data-day', day);
-                    
-                    const isAvailable = isDayAvailableForOrdering(day);
-
-                    tabBtn.classList.add('day-tab-btn', isAvailable ? 'available' : 'unavailable');
-                    
-                    tabBtn.innerHTML = `
-                        <div class="day-tab-day">${day}</div>
-                        <div class="day-tab-date">${dayDates[day]}</div>
-                        ${!isAvailable ? '<div class="day-tab-status">Not Available</div>' : ''}
-                    `;
-                    
-                    tabBtn.style.cssText = `
-                        flex: 1;
-                        min-width: 100px;
-                        padding: 0.75rem 0.5rem;
-                        border: 2px solid;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        transition: all 0.2s;
-                        text-align: center;
-                    `;
-                    
-                    tabBtn.addEventListener('click', () => {
-                        // Clear previous selection and reset availability styling
-                        document.querySelectorAll('.day-tab-btn').forEach(btn => {
-                            btn.classList.remove('selected');
-                            const btnDay = btn.getAttribute('data-day');
-                            const available = isDayAvailableForOrdering(btnDay);
-                            btn.classList.toggle('available', available);
-                            btn.classList.toggle('unavailable', !available);
-                        });
-
-                        // Mark this tab selected (keeps text visible via CSS)
-                        tabBtn.classList.add('selected');
-
-                        // Show this day's menu
-                        showDayMenu(day, menuByDay[day], isAvailable, dayDates[day]);
-                    });
-                    
-                    dayTabs.appendChild(tabBtn);
-                    
-                    // Auto-select first available day or first day
-                    if (!firstDaySet) {
-                        firstDaySet = true;
-                        setTimeout(() => tabBtn.click(), 100);
-                    }
-                }
-            });
-            
-            menuDisplay.appendChild(dayTabs);
-            
-            // Create menu content container
-            const menuContent = document.createElement('div');
-            menuContent.id = 'menuContent';
-            menuDisplay.appendChild(menuContent);
-            
-            if (Object.keys(menuByDay).length === 0) {
-                menuDisplay.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 20px;">No menu items available. Please check your menu data in Google Sheets.</p>';
-            }
-        }
-        
-        function showDayMenu(day, dayMenu, isAvailable, dayDate) {
-            const menuContent = document.getElementById('menuContent');
-
-            menuContent.innerHTML = `
-                <div style="background: var(--bg-warm); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
-                    <h3 style="color: var(--primary); margin: 0 0 0.5rem 0; font-size: 1.2rem;">${day}'s Menu</h3>
-                    <p style="color: var(--text-medium); margin: 0; font-size: 0.9rem;">${day}, ${dayDate}</p>
-                    ${!isAvailable ? '<p style="color: #dc2626; margin: 0.5rem 0 0 0; font-size: 0.85rem; font-weight: 600;">⚠️ Ordering not available for this day</p>' : ''}
-                </div>
-                <div class="menu-items-list" style="background: var(--bg-white); border-radius: 6px; padding: 0.75rem;">
-                    ${Object.keys(dayMenu).map(itemName => {
-                        const sizes = dayMenu[itemName];
-                        return sizes.map(item => `
-                            <div class="menu-item-row" style="display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border-light);">
-                                <span class="menu-item-name" style="flex: 1; color: var(--text-medium); font-weight: 500;">${item.ItemName || item.item} <span style="color: var(--text-muted); font-size: 0.85rem;">(${item.Size || item.size})</span></span>
-                                <span class="menu-item-price" style="color: var(--primary); font-weight: 600; margin-left: 1rem;">${formatPriceLabel(item.Price, item.price)}</span>
-                            </div>
-                        `).join('');
-                    }).join('')}
-                </div>
-            `;
-        }
-        
-        function getDateForDayOfWeek(dayName) {
-            const dayIndexMap = {
-                'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3,
-                'Friday': 4, 'Saturday': 5, 'Sunday': 6
-            };
-
-            const today = new Date();
-            const jsDow = today.getDay(); // 0=Sun ... 6=Sat
-
-            // Requirement: Every Sunday at 12:00 AM, switch to NEXT week's menu.
-            // So on Sunday, treat "active Monday" as tomorrow; otherwise, this week's Monday.
-            const activeMonday = new Date(today);
-            if (jsDow === 0) {
-                activeMonday.setDate(today.getDate() + 1);
-            } else {
-                activeMonday.setDate(today.getDate() - (jsDow - 1));
-            }
-            activeMonday.setHours(0,0,0,0);
-
-            const targetDate = new Date(activeMonday);
-            targetDate.setDate(activeMonday.getDate() + (dayIndexMap[dayName] ?? 0));
-
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${monthNames[targetDate.getMonth()]} ${targetDate.getDate()}`;
-        }
-        
-        // ===================================
-        
-
-// ===================================
-// TIME HELPERS (America/Chicago)
-// ===================================
-function getCSTParts(date = new Date()) {
-    // Returns hour/minute and JS day index (0=Sun..6=Sat) in America/Chicago
-    const fmt = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Chicago',
-        weekday: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    });
-    const parts = fmt.formatToParts(date);
-    const map = Object.fromEntries(parts.map(p => [p.type, p.value]));
-    const wk = map.weekday; // e.g., "Mon"
-    const hour = parseInt(map.hour, 10);
-    const minute = parseInt(map.minute, 10);
-    const wkToJs = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-    const jsDow = wkToJs[wk] ?? date.getDay();
-    return { jsDow, hour, minute, weekdayShort: wk };
-}
-
-function isPastCutoffCST(cutoffHour = ORDER_CUTOFF_HOUR, cutoffMinute = 0) {
-    const { hour, minute } = getCSTParts(new Date());
-    return hour > cutoffHour || (hour === cutoffHour && minute >= cutoffMinute);
-}
-
-        // DAY AVAILABILITY
-        // ===================================
-        
-        // Convert JavaScript's Sunday-first (0-6) to Monday-first (0-6) indexing
-        // Monday=0, Tuesday=1, ..., Sunday=6
-        function getMondayBasedIndex(jsDayIndex) {
-            return jsDayIndex === 0 ? 6 : jsDayIndex - 1;
-        }
-        
-        
-
-
-        // ===============================
-        // PHONE NUMBER VALIDATION (US 10-digit)
-        // ===============================
-        function normalizePhoneDigits(value) {
-            return String(value || '').replace(/\D/g, '');
-        }
-
-        function isValidUSPhone(value) {
-            const digits = normalizePhoneDigits(value);
-            return digits.length === 10;
-        }
-
-        function formatUSPhone(value) {
-            const digits = normalizePhoneDigits(value).substring(0, 10);
-            if (digits.length === 0) return '';
-            if (digits.length < 4) return `(${digits}`;
-            if (digits.length < 7) return `(${digits.substring(0,3)}) ${digits.substring(3)}`;
-            return `(${digits.substring(0,3)}) ${digits.substring(3,6)}-${digits.substring(6,10)}`;
-        }
-
-        function clearFieldError(element) {
-            if (!element) return;
-            element.classList.remove('field-error');
-            const existing = element.parentElement?.querySelector(`.field-error-message[data-for="${element.id || element.name || ''}"]`);
-            if (existing) existing.remove();
-        }
-
-        function attachPhoneValidation() {
-            const phoneEl = document.getElementById('customerPhone');
-            if (!phoneEl) return;
-
-            phoneEl.addEventListener('input', () => {
-                const formatted = formatUSPhone(phoneEl.value);
-                // Keep caret behavior simple: set value; most browsers keep caret near end
-                phoneEl.value = formatted;
-                // If user is typing, clear any prior error once it becomes valid
-                if (isValidUSPhone(phoneEl.value)) clearFieldError(phoneEl);
-            });
-
-            phoneEl.addEventListener('blur', () => {
-                if (phoneEl.value && !isValidUSPhone(phoneEl.value)) {
-                    setFieldError(phoneEl, 'Please enter a valid 10-digit phone number.');
-                }
-            });
-        }
-
-function isDayAvailableForOrdering(dayName) {
-    const { jsDow, hour, minute } = getCSTParts(new Date());
-
-    // Convert JS day index to Monday-based (Mon=0..Sun=6).
-    // On Sunday, the active menu has already switched to next week, so keep Sunday orderable.
-    const todayIdx = (jsDow === 0) ? -1 : jsDow - 1;
-
-    const dayIndexMap = {
-        'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3,
-        'Friday': 4, 'Saturday': 5, 'Sunday': 6
-    };
-    const targetIdx = dayIndexMap[dayName];
-    if (targetIdx === undefined) return false;
-
-    // Block past days and same-day
-    if (targetIdx <= todayIdx) return false;
-
-    // After 10 PM CST: block TOMORROW only (rest of week stays orderable)
-    const afterCutoff = (hour > ORDER_CUTOFF_HOUR) || (hour === ORDER_CUTOFF_HOUR && minute >= 0);
-    const tomorrowIdx = Math.min(todayIdx + 1, 6);
-
-    if (afterCutoff && targetIdx === tomorrowIdx) return false;
-
-    // Otherwise it's a future day and allowed
-    return true;
-}
-        
-        function getAvailableDays() {
-            const now = new Date();
-            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            console.log('=== Checking available days (order dropdown) ===');
-            console.log(`Today: ${dayNames[now.getDay()]} at ${now.getHours()}:00`);
-
-            // Days that actually have menu items in the sheet (for the active week)
-            const daysWithMenu = new Set();
-            (menuData || []).forEach(item => {
-                const d = normalizeDayLabel(item.DayOfWeek || item.day);
-                const name = item.ItemName || item.item;
-                if (d && name) daysWithMenu.add(d);
-            });
-
-            // Only show days that:
-            //  1) are orderable by time rules,
-            //  2) have at least 1 menu item
-            const available = daysOfWeek.filter(day =>
-                daysWithMenu.has(day) &&
-                isDayAvailableForOrdering(day)
-            );
-
-            const missingMenuDays = daysOfWeek.filter(d => !daysWithMenu.has(d));
-            if (missingMenuDays.length) {
-                console.log(`Days hidden (no menu): ${missingMenuDays.join(', ')}`);
-            }
-            console.log(`Available (orderable + has menu): ${available.join(', ') || 'None'}`);
-            console.log('=== End ===');
-            return available;
-        }
-        
-        // ===================================
-        // DAY SECTIONS
-        // ===================================
-        function addDay() {
-            dayCounter++;
-            const daysContainer = document.getElementById('daysContainer');
-            
-            const daySection = document.createElement('div');
-            daySection.className = 'day-order-section';
-            daySection.id = `day-${dayCounter}`;
-            
-            const availableDays = getAvailableDays();
-            
-            daySection.innerHTML = `
-                <div class="day-order-header">
-                    <span class="day-order-title" id="day-${dayCounter}-title">Select a Day</span>
-                    ${dayCounter > 1 ? `<button type="button" class="remove-day-btn" onclick="removeDay(${dayCounter})">✕</button>` : ''}
-                </div>
-                <select class="day-select" data-day-id="${dayCounter}" required>
-                    <option value="">Select a day</option>
-                    ${availableDays.map(day => `<option value="${day}">${day}</option>`).join('')}
-                </select>
-                <div class="items-container" id="items-${dayCounter}"></div>
-                <button type="button" class="add-item-btn" id="add-item-${dayCounter}" style="display: none;">+ Add Item</button>
-            `;
-            
-            daysContainer.appendChild(daySection);
-            
-            // Add event listener
-            const daySelect = daySection.querySelector('.day-select');
-            daySelect.addEventListener('change', () => updateDayItems(dayCounter));
-        }
-        
-        function removeDay(dayId) {
-            document.getElementById(`day-${dayId}`).remove();
-            updateSummary();
-        }
-        
-        function updateDayItems(dayId) {
-            const daySection = document.getElementById(`day-${dayId}`);
-            const daySelect = daySection.querySelector('.day-select');
-            const selectedDay = daySelect.value;
-            const itemsContainer = document.getElementById(`items-${dayId}`);
-            const addItemBtn = document.getElementById(`add-item-${dayId}`);
-            const dayTitle = document.getElementById(`day-${dayId}-title`);
-            
-            dayTitle.textContent = selectedDay || 'Select a Day';
-            itemsContainer.innerHTML = '';
-            
-            if (!selectedDay) {
-                addItemBtn.style.display = 'none';
-                updateSummary();
-                return;
-            }
-            
-            // Get items for this day
-            const availableItems = menuData.filter(item => {
-                const day = normalizeDayLabel(item.DayOfWeek || item.day);
-                return day === selectedDay;
-            });
-            
-            console.log(`Items for ${selectedDay}:`, availableItems);
-            
-            if (availableItems.length === 0) {
-                itemsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 10px;">No items available for this day</p>';
-                addItemBtn.style.display = 'none';
-            } else {
-                addItemBtn.style.display = 'block';
-                
-                // Remove old event listener and add new one
-                const newAddItemBtn = addItemBtn.cloneNode(true);
-                addItemBtn.parentNode.replaceChild(newAddItemBtn, addItemBtn);
-                newAddItemBtn.addEventListener('click', () => addItem(dayId));
-                
-                // Add first item automatically
-                addItem(dayId);
-            }
-            
-            updateSummary();
-        }
-        
-        // ===================================
-        // ITEM ROWS
-        // ===================================
-        function addItem(dayId) {
-            const daySection = document.getElementById(`day-${dayId}`);
-            const daySelect = daySection.querySelector('.day-select');
-            const selectedDay = daySelect.value;
-            
-            if (!selectedDay) {
-                showError('Please select a day first before adding items.'); window.scrollTo(0, 0);
-                return;
-            }
-            
-            const itemsContainer = document.getElementById(`items-${dayId}`);
-            const itemId = Date.now() + Math.random();
-            
-            // Get unique items for this day
-            const availableItems = menuData.filter(item => {
-                const day = normalizeDayLabel(item.DayOfWeek || item.day);
-                return day === selectedDay;
-            });
-            
-            const uniqueItems = [...new Set(availableItems.map(m => m.ItemName || m.item))];
-            
-            const itemRow = document.createElement('div');
-            itemRow.className = 'item-row';
-            itemRow.id = `item-${itemId}`;
-            itemRow.innerHTML = `
-                <select class="item-select" data-item-id="${itemId}" data-day="${selectedDay}" required>
-                    <option value="">Select item</option>
-                    ${uniqueItems.map(item => `<option value="${item}">${item}</option>`).join('')}
-                </select>
-                <select class="size-select" data-item-id="${itemId}" required>
-                    <option value="">Select size</option>
-                </select>
-                <select class="qty-input" data-item-id="${itemId}" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-                <button type="button" class="remove-item-btn" onclick="removeItem(${itemId})">✕</button>
-            `;
-            
-            itemsContainer.appendChild(itemRow);
-            
-            // Add event listeners
-            const itemSelect = itemRow.querySelector('.item-select');
-            itemSelect.addEventListener('change', () => updateSizeOptions(itemId));
-            
-            const sizeSelect = itemRow.querySelector('.size-select');
-            sizeSelect.addEventListener('change', updateSummary);
-            
-            const qtyInput = itemRow.querySelector('.qty-input');
-            qtyInput.addEventListener('change', updateSummary);
-        }
-        
-        function removeItem(itemId) {
-            document.getElementById(`item-${itemId}`).remove();
-            updateSummary();
-        }
-        
-        function updateSizeOptions(itemId) {
-            const itemSelect = document.querySelector(`.item-select[data-item-id="${itemId}"]`);
-            const sizeSelect = document.querySelector(`.size-select[data-item-id="${itemId}"]`);
-            
-            const selectedItem = itemSelect.value;
-            const selectedDay = itemSelect.getAttribute('data-day');
-            
-            sizeSelect.innerHTML = '<option value="">Select size</option>';
-            
-            if (selectedItem && selectedDay) {
-                const sizes = menuData.filter(m => {
-                    const day = m.DayOfWeek || m.day;
-                    const item = m.ItemName || m.item;
-                    return item === selectedItem && day === selectedDay;
-                });
-                
-                sizes.forEach(size => {
-                    const option = document.createElement('option');
-                    option.value = size.Size || size.size;
-                    option.setAttribute('data-price', size.Price || size.price);
-                    option.textContent = `${size.Size || size.size} - ${formatPriceLabel(size.Price, size.price)}`;
-                    sizeSelect.appendChild(option);
-                });
-            }
-            
-            updateSummary();
-        }
-        
-        // ===================================
-        // ORDER SUMMARY
-        // ===================================
-        function updateSummary() {
-            const summaryContent = document.getElementById('summaryContent');
-            const daySections = document.querySelectorAll('.day-order-section');
-            
-            let orderItems = [];
-            let subtotal = 0;
-            const selectedDays = new Set();
-            
-            daySections.forEach(daySection => {
-                const daySelect = daySection.querySelector('.day-select');
-                const day = daySelect.value;
-                
-                if (!day) return;
-                selectedDays.add(day);
-                
-                const itemRows = daySection.querySelectorAll('.item-row');
-                itemRows.forEach(row => {
-                    const itemSelect = row.querySelector('.item-select');
-                    const sizeSelect = row.querySelector('.size-select');
-                    const qtyInput = row.querySelector('.qty-input');
-                    
-                    const itemName = itemSelect.value;
-                    const size = sizeSelect.value;
-                    const qty = parseInt(qtyInput.value) || 0;
-                    
-                    if (itemName && size && qty > 0) {
-                        const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
-                        const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
-                        const lineTotal = price * qty;
-                        
-                        subtotal += lineTotal;
-                        orderItems.push({
-                            day: day,
-                            item: itemName,
-                            size: size,
-                            qty: qty,
-                            price: price,
-                            lineTotal: lineTotal
-                        });
-                    }
-                });
-            });
-            
-            const fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
-            const deliveryFee = fulfillment === 'Delivery' ? (DELIVERY_FEE_PER_DAY * selectedDays.size) : 0;
-            const total = subtotal + deliveryFee;
-            
-            if (orderItems.length === 0) {
-                summaryContent.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Add items to see your order summary</p>';
-                return;
-            }
-            
-            let html = '';
-            const groupedByDay = {};
-            orderItems.forEach(item => {
-                if (!groupedByDay[item.day]) {
-                    groupedByDay[item.day] = [];
-                }
-                groupedByDay[item.day].push(item);
-            });
-            
-            daysOfWeek.forEach(day => {
-                if (groupedByDay[day]) {
-                    html += `<div style="margin-bottom: 0.75rem;"><strong>${day}:</strong></div>`;
-                    groupedByDay[day].forEach(item => {
-                        html += `
-                            <div class="summary-line">
-                                <span>${item.item} (${item.size}) x${item.qty}</span>
-                                <span>$${item.lineTotal.toFixed(2)}</span>
-                            </div>
-                        `;
-                    });
-                }
-            });
-            
-            html += `
-                <div class="summary-line" style="margin-top: 0.75rem; border-top: 1px solid var(--border-warm); padding-top: 0.5rem;">
-                    <span>Subtotal:</span>
-                    <span>$${subtotal.toFixed(2)}</span>
-                </div>
-            `;
-            
-            if (deliveryFee > 0) {
-                html += `
-                    <div class="summary-line">
-                        <span>Delivery Fee (${selectedDays.size} day${selectedDays.size > 1 ? 's' : ''}):</span>
-                        <span>$${deliveryFee.toFixed(2)}</span>
-                    </div>
-                `;
-            }
-            
-            html += `
-                <div class="summary-total">
-                    <span>Total:</span>
-                    <span>$${total.toFixed(2)}</span>
-                </div>
-            `;
-            
-            summaryContent.innerHTML = html;
-        }
-        
-        // ===================================
-        // EVENT LISTENERS
-        // ===================================
-        function setupEventListeners() {
-            // Fulfillment method change
-            document.querySelectorAll('input[name="fulfillment"]').forEach(radio => {
-                radio.addEventListener('change', () => {
-                    const deliveryContainer = document.getElementById('deliveryAddressContainer');
-                    if (radio.value === 'Delivery') {
-                        deliveryContainer.classList.add('show');
-                        document.getElementById('deliveryAddress').required = true;
-                    } else {
-                        deliveryContainer.classList.remove('show');
-                        document.getElementById('deliveryAddress').required = false;
-                    }
-                    updateSummary();
-                });
-            });
-            
-            // Add day button
-            document.getElementById('addDayBtn').addEventListener('click', addDay);
-            
-            // Submit button
-            document.getElementById('submitBtn').addEventListener('click', handleSubmit);
-        }
-        
-        // ===================================
-        // ORDER SUBMISSION
-        // ===================================
-        async function handleSubmit(e) {
-            e.preventDefault();
-
-            if (isSubmitting) {
-                return;
-            }
-
-            clearFieldErrors();
-            hideMessages();
-            let firstInvalidField = null;
-            const fail = (el, msg) => {
-                showError(msg);
-                setFieldError(el, msg);
-                if (!firstInvalidField) firstInvalidField = el;
-            };
-
-            const name = document.getElementById('customerName').value.trim();
-            const phone = document.getElementById('customerPhone').value.trim();
-            const email = document.getElementById('customerEmail').value.trim();
-            const fulfillment = document.querySelector('input[name="fulfillment"]:checked').value;
-            const deliveryAddress = fulfillment === 'Delivery' ? document.getElementById('deliveryAddress').value.trim() : '';
-
-            if (!name) {
-                fail(document.getElementById('customerName'), 'Please enter your name.');
-                return;
-            }
-
-            if (!phone) {
-                fail(document.getElementById('customerPhone'), 'Please enter your phone number.');
-                return;
-            }
-
-            if (!isValidUSPhone(phone)) {
-                fail(document.getElementById('customerPhone'), 'Please enter a valid 10-digit phone number.');
-                return;
-            }
-
-            if (fulfillment === 'Delivery' && !deliveryAddress) {
-                fail(document.getElementById('deliveryAddress'), 'Please enter a delivery address.');
-                return;
-            }
-
-            // Collect order data
-            const daySections = document.querySelectorAll('.day-order-section');
-            const orderLines = [];
-            let subtotal = 0;
-            const selectedDays = new Set();
-            let hasError = false;
-
-            daySections.forEach((daySection, sectionIndex) => {
-                const daySelect = daySection.querySelector('.day-select');
-                const day = (daySelect.value || '').trim();
-
-                if (!day) {
-                    fail(daySelect, `Please select a day for order section #${sectionIndex + 1}.`);
-                    hasError = true;
-                    return;
-                }
-
-                if (!isDayAvailableForOrdering(day)) {
-                    fail(daySelect, `Ordering is not available for ${day}. Please select another day.`);
-                    hasError = true;
-                    return;
-                }
-
-                selectedDays.add(day);
-
-                const itemRows = daySection.querySelectorAll('.item-row');
-                let hasAtLeastOneCompleteItem = false;
-
-                itemRows.forEach(row => {
-                    const itemSelect = row.querySelector('.item-select');
-                    const sizeSelect = row.querySelector('.size-select');
-                    const qtyInput = row.querySelector('.qty-input');
-
-                    const itemName = (itemSelect.value || '').trim();
-                    const size = (sizeSelect.value || '').trim();
-                    const qty = parseInt(qtyInput.value, 10) || 0;
-
-                    if (!itemName && !size) {
-                        return;
-                    }
-
-                    if (!itemName) {
-                        fail(itemSelect, `Please select an item for ${day}.`);
-                        hasError = true;
-                        return;
-                    }
-                    if (!size) {
-                        fail(sizeSelect, `Please select a size for ${itemName} on ${day}.`);
-                        hasError = true;
-                        return;
-                    }
-                    if (qty < 1) {
-                        fail(qtyInput, `Please select a quantity for ${itemName} on ${day}.`);
-                        hasError = true;
-                        return;
-                    }
-
-                    const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
-                    const price = parseFloat(selectedOption.getAttribute('data-price')) || 0;
-                    const lineTotal = price * qty;
-
-                    subtotal += lineTotal;
-                    hasAtLeastOneCompleteItem = true;
-
-                    orderLines.push({
-                        day: day,
-                        itemName: itemName,
-                        size: size,
-                        quantity: qty,
-                        unitPrice: price,
-                        lineTotal: lineTotal
-                    });
-                });
-
-                if (hasError) return;
-
-                if (!hasAtLeastOneCompleteItem) {
-                    fail(daySelect, `Please add at least one menu item for ${day}.`);
-                    hasError = true;
-                    return;
-                }
-            });
-
-            if (hasError) {
-                if (firstInvalidField) {
-                    firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    if (firstInvalidField.focus) firstInvalidField.focus();
-                }
-                return;
-            }
-
-            if (orderLines.length === 0) {
-                fail(document.getElementById('daysContainer'), 'Please add at least one item to your order.');
-                return;
-            }
-
-            const deliveryFee = fulfillment === 'Delivery' ? (DELIVERY_FEE_PER_DAY * selectedDays.size) : 0;
-            const total = subtotal + deliveryFee;
-
-            const orderData = {
-                action: 'submitOrder',
-                clientRequestId: generateClientRequestId(),
-                weekLabel: activeWeek,
-                name: name,
-                phone: phone,
-                email: email,
-                fulfillment: fulfillment,
-                deliveryAddress: deliveryAddress,
-                subtotal: subtotal,
-                deliveryFee: deliveryFee,
-                total: total,
-                orderLines: orderLines
-            };
-
-            setSubmitState(true);
-            showLoading(true);
-
-            try {
-                const formBody = new URLSearchParams();
-                formBody.append('action', 'submitOrder');
-                formBody.append('payload', JSON.stringify(orderData));
-
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: formBody
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-                const result = await response.json();
-                showLoading(false);
-
-                if (result.error) {
-                    showError(result.error);
-                    setSubmitState(false);
-                    return;
-                }
-
-                showConfirmation(orderData, result.orderId);
-            } catch (error) {
-                showLoading(false);
-                setSubmitState(false);
-                showError('Failed to submit order. Please try again.');
-                console.error(error);
-            }
-        }
-
-        // ===================================
-        // CONFIRMATION
-        // ===================================
-        function showConfirmation(orderData, orderId) {
-            document.getElementById('formContainer').classList.add('hidden');
-            const confirmationContainer = document.getElementById('confirmationContainer');
-            confirmationContainer.classList.remove('hidden');
-            
-            let receiptText = `
-═══════════════════════════════════
-      ARUNA'S KITCHEN
-       ORDER CONFIRMED
-═══════════════════════════════════
-
-Order ID: ${orderId}
-Week: ${orderData.weekLabel}
-Customer: ${orderData.name}
-Phone: ${orderData.phone}
-Fulfillment: ${orderData.fulfillment}
-${orderData.deliveryAddress ? `Address: ${orderData.deliveryAddress}` : ''}
-
-───────────────────────────────────
-ORDER DETAILS
-───────────────────────────────────
-`;
-            
-            const groupedByDay = {};
-            orderData.orderLines.forEach(line => {
-                if (!groupedByDay[line.day]) {
-                    groupedByDay[line.day] = [];
-                }
-                groupedByDay[line.day].push(line);
-            });
-            
-            daysOfWeek.forEach(day => {
-                if (groupedByDay[day]) {
-                    receiptText += `\n${day}:\n`;
-                    groupedByDay[day].forEach(line => {
-                        receiptText += `  ${line.itemName} (${line.size})\n`;
-                        receiptText += `    ${line.quantity} x $${line.unitPrice.toFixed(2)} = $${line.lineTotal.toFixed(2)}\n`;
-                    });
-                }
-            });
-            
-            receiptText += `
-═══════════════════════════════════
-Subtotal:        $${orderData.subtotal.toFixed(2)}`;
-            
-            if (orderData.deliveryFee > 0) {
-                receiptText += `\nDelivery Fee:    $${orderData.deliveryFee.toFixed(2)}`;
-            }
-            
-            receiptText += `
-───────────────────────────────────
-TOTAL:           $${orderData.total.toFixed(2)}
-═══════════════════════════════════
-
-Thank you for your order!
-We'll have it ready for you.
-
-📞 +1 248-877-9924
-            `;
-            
-            confirmationContainer.innerHTML = `
-                <div class="confirmation-card">
-                    <div class="confirmation-icon">✅</div>
-                    <h2 class="confirmation-title">Order Confirmed!</h2>
-                    <p class="order-id">Order ID: ${orderId}</p>
-                    <div class="receipt">${receiptText}</div>
-                    <button class="new-order-btn" onclick="location.reload()">Place Another Order</button>
-                </div>
-            `;
-        }
-        
-        // ===================================
-        // UTILITY FUNCTIONS
-        // ===================================
-        function showLoading(show) {
-            document.getElementById('loadingIndicator').style.display = show ? 'block' : 'none';
-        }
-        
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.classList.remove('hidden');
-        }
-        
-        function hideMessages() {
-            document.getElementById('errorMessage').classList.add('hidden');
-            document.getElementById('successMessage').classList.add('hidden');
-        }
-
-        function clearFieldErrors() {
-            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
-            document.querySelectorAll('.field-error-message').forEach(el => el.remove());
-        }
-
-        function generateClientRequestId() {
-            if (window.crypto && typeof window.crypto.randomUUID === 'function') {
-                return window.crypto.randomUUID();
-            }
-            return `req-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-        }
-
-        function setSubmitState(submitting) {
-            const submitBtn = document.getElementById('submitBtn');
-            if (!submitBtn) return;
-            isSubmitting = submitting;
-            submitBtn.disabled = submitting;
-            submitBtn.textContent = submitting ? 'Submitting Order...' : 'Place Order';
-            submitBtn.style.opacity = submitting ? '0.7' : '1';
-        }
-
-        function setFieldError(element, message) {
-            if (!element) return;
-            element.classList.add('field-error');
-
-            // Remove existing inline message for this element (if any)
-            const existing = element.parentElement?.querySelector(`.field-error-message[data-for="${element.id || element.name || ''}"]`);
-            if (existing) existing.remove();
-
-            const msg = document.createElement('div');
-            msg.className = 'field-error-message';
-            msg.textContent = message;
-            msg.setAttribute('data-for', element.id || element.name || '');
-
-            // Insert message right after the field
-            if (element.nextSibling) {
-                element.parentNode.insertBefore(msg, element.nextSibling);
-            } else {
-                element.parentNode.appendChild(msg);
-            }
-        }
-    
-        
-        // Make functions global for onclick handlers
-        window.removeDay = removeDay;
-        window.removeItem = removeItem;
-    </script>
+        receipt.append(group);
+      });
+      const totals = element('div', undefined, 'totals');
+      [['Food subtotal', payload.subtotal], ['Delivery fee', payload.deliveryFee], ['Total', payload.total]].forEach(([label, amount]) => {
+        const row = element('div', undefined, 'total-line' + (label === 'Total' ? ' grand' : ''));
+        row.append(element('span', label), element('span', money(Math.round(amount * 100)))); totals.append(row);
+      });
+      receipt.append(totals, element('p', payload.email && !duplicate && !cancelled ? 'A confirmation will also be sent to ' + payload.email + '.' : 'Save or print this receipt for your records.', 'field-hint'));
+      const actions = element('div', undefined, 'receipt-actions');
+      const print = element('button', 'Print receipt', 'button button-secondary'); print.type = 'button'; print.addEventListener('click', () => window.print());
+      const again = element('button', 'Place another order', 'button button-primary'); again.type = 'button'; again.addEventListener('click', () => window.location.reload());
+      actions.append(print);
+      if (!cancelled) actions.append(again);
+      else { const call = element('a', 'Call the kitchen', 'button button-primary'); call.href = 'tel:+12488779924'; actions.append(call); }
+      receipt.append(actions);
+      const contact = element('p', 'Questions? ', 'field-hint');
+      const phone = element('a', '+1 248-877-9924'); phone.href = 'tel:+12488779924'; contact.append(phone); receipt.append(contact);
+      receipt.hidden = false;
+      byId('mobileCart').hidden = true;
+      document.body.classList.remove('has-cart');
+      heading.focus();
+    }
+
+    function restorePending() {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(PENDING_STORAGE_KEY) || 'null');
+        const payload = saved && saved.payload;
+        if (!payload || typeof payload.clientRequestId !== 'string' || !payload.clientRequestId || !Array.isArray(payload.orderLines) || !payload.orderLines.length || !parseWeekLabel(payload.weekLabel)) return;
+        if (!payload.orderLines.every(line => DAYS.includes(line.day) && typeof line.itemName === 'string' && typeof line.size === 'string' && Number.isInteger(line.quantity) && line.quantity > 0 && Number.isFinite(line.unitPrice) && Number.isFinite(line.lineTotal))) return;
+        state.pending = saved;
+        state.fulfillment = payload.fulfillment === 'Delivery' ? 'Delivery' : 'Pickup';
+        byId('customerName').value = payload.name || '';
+        byId('customerPhone').value = payload.phone || '';
+        byId('customerEmail').value = payload.email || '';
+        byId('deliveryAddress').value = payload.deliveryAddress || '';
+        document.querySelector(`input[name="fulfillment"][value="${state.fulfillment}"]`).checked = true;
+      } catch (_) { /* Invalid browser storage is never submitted automatically. */ }
+    }
+
+    async function loadMenu(pricesChanged = false, previousLines = null, previousWeek = state.weekLabel) {
+      const previous = previousLines || (state.pending ? [] : selectedLines());
+      byId('loadingState').hidden = false;
+      byId('menuLoadError').hidden = true;
+      try {
+        const data = await requestJSON(SCRIPT_URL + '?action=getMenu', {}, 25000);
+        const monday = parseWeekLabel(data.weekLabel);
+        const menu = normalizeMenu(data.menu);
+        if (data.error || !monday || !menu.length) throw new Error('Menu unavailable');
+        state.weekLabel = data.weekLabel;
+        state.monday = monday;
+        state.menu = menu;
+        state.cart.clear();
+        const sameWeek = previousWeek === state.weekLabel;
+        (sameWeek ? previous : []).forEach(line => {
+          const item = menu.find(entry => entry.day === line.day && entry.itemName === line.itemName && entry.size === line.size && entry.cents !== null);
+          if (item) state.cart.set(item.id, line.quantity);
+        });
+        state.selectedDay = DAYS.find(day => menu.some(item => item.day === day) && dayAvailability(day).available) || menu[0].day;
+        byId('weekLabel').textContent = state.weekLabel;
+        byId('shop').hidden = false;
+        renderMenu(); updateFulfillment(); refreshAvailability(); setPendingUI();
+        if (pricesChanged) showNotice(sameWeek ? 'The menu has changed. We refreshed your cart with current prices and removed any unavailable dishes. Please review the dishes and total before placing your order.' : 'A new weekly menu is available. Please choose your dishes again so that every item is ordered for the correct date.', true);
+      } catch (_) {
+        byId('menuLoadError').hidden = false;
+        byId('shop').hidden = true;
+        if (state.pending) setPendingUI();
+      } finally { byId('loadingState').hidden = true; }
+    }
+
+    function refreshAvailability() {
+      if (!state.menu.length || state.confirmed) return;
+      const anyAvailable = state.menu.some(item => dayAvailability(item.day).available);
+      const afterCutoff = Number(centralParts().hour) >= ORDER_CUTOFF_HOUR;
+      byId('cutoffText').textContent = !anyAvailable ? 'Ordering has closed for the remaining days on this menu. Please check back for the next week.' : afterCutoff ? 'Tomorrow’s ordering is closed. You can still order for later days. Delivery is $2 per day.' : 'Order by 10 PM Central for the next day. Pickup or $2 delivery per day.';
+      const token = state.menu.map(item => item.day + ':' + dayAvailability(item.day).available).join('|') + ':' + afterCutoff;
+      if (state.availabilityToken !== token) {
+        state.availabilityToken = token;
+        renderMenu(); renderCart();
+      }
+    }
+
+    function initialize() {
+      byId('brandLogo').addEventListener('error', event => { event.currentTarget.hidden = true; });
+      if (byId('brandLogo').complete && !byId('brandLogo').naturalWidth) byId('brandLogo').hidden = true;
+      restorePending();
+      byId('orderForm').addEventListener('submit', handleSubmit);
+      byId('reloadMenu').addEventListener('click', () => loadMenu());
+      byId('retryOrder').addEventListener('click', submitPending);
+      document.querySelectorAll('input[name="fulfillment"]').forEach(input => input.addEventListener('change', updateFulfillment));
+      byId('dayTabs').addEventListener('click', event => {
+        const button = event.target.closest('[data-day]');
+        if (button) { state.selectedDay = button.dataset.day; renderMenu(); byId('tab-' + state.selectedDay).focus(); }
+      });
+      byId('dayTabs').addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const tabs = [...byId('dayTabs').querySelectorAll('[data-day]')];
+        const index = tabs.findIndex(tab => tab.dataset.day === state.selectedDay);
+        const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        state.selectedDay = tabs[next].dataset.day; renderMenu(); byId('tab-' + state.selectedDay).focus();
+      });
+      byId('menuItems').addEventListener('click', event => {
+        const button = event.target.closest('[data-adjust]');
+        if (button) changeQuantity(button.dataset.id, (state.cart.get(button.dataset.id) || 0) + Number(button.dataset.adjust));
+      });
+      byId('menuItems').addEventListener('change', event => {
+        if (event.target.matches('[data-quantity]')) changeQuantity(event.target.dataset.quantity, Number(event.target.value));
+      });
+      byId('cartContents').addEventListener('click', event => {
+        const button = event.target.closest('[data-remove]');
+        if (!button || state.pending) return;
+        state.cart.delete(button.dataset.remove); renderCart(); updateQuantityControls(); byId('cartHeading').focus();
+      });
+      byId('reviewOrder').addEventListener('click', () => {
+        byId('checkout').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        byId('cartHeading').focus({ preventScroll: true });
+      });
+      byId('customerPhone').addEventListener('blur', event => {
+        const digits = event.target.value.replace(/\D/g, '');
+        if (digits.length === 10) event.target.value = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+      });
+      window.addEventListener('focus', refreshAvailability);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshAvailability(); });
+      window.setInterval(refreshAvailability, 60000);
+      loadMenu();
+    }
+
+    document.addEventListener('DOMContentLoaded', initialize);
+  </script>
 </body>
 </html>
