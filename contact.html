@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FBF1DF">
+  <title>Contact us — Aruna's Kitchen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #fbf1df; --surface: #fffcf5; --ink: #24465c; --muted: #52626b;
+      --rule: #c9c8b6; --control: #7b8c88; --error: #94382f;
+      --font: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 400 1rem/1.55 var(--font); }
+    a { color: var(--ink); text-underline-offset: .2em; }
+    button, input, textarea { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid #236b91; outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .shell { width: min(1180px, calc(100% - 64px)); margin-inline: auto; }
+    .site-header { padding-top: 16px; }
+    .brand-banner { display: block; background: #f1dfc2; }
+    .brand-banner img { display: block; width: 100%; height: auto; }
+    .header-nav { display: flex; gap: 26px; align-items: center; border-bottom: 1px solid var(--rule); }
+    .header-nav a { display: inline-flex; align-items: center; min-height: 48px; font-size: .875rem; font-weight: 700; text-decoration: none; }
+    .header-nav a:last-child { margin-left: auto; }
+    .header-nav a:hover, .header-nav [aria-current] { text-decoration: underline; }
+    .contact-layout { display: grid; grid-template-columns: minmax(235px, .8fr) minmax(0, 1.2fr); align-items: start; gap: clamp(32px, 7vw, 110px); margin-block: clamp(28px, 4vw, 60px); }
+    h1, h2, p { margin: 0; }
+    h1 { font-size: clamp(2.55rem, 5vw, 4.35rem); line-height: 1.03; letter-spacing: -.05em; font-weight: 700; }
+    .intro p { margin: 18px 0 0; max-width: 40ch; color: var(--muted); font-size: 1.0625rem; }
+    .kitchen-photo { margin-top: 28px; height: clamp(135px, 17vw, 220px); background: #e7d5bc url('kitchen-photos/golden-rice-in-pan.webp') center 50%/cover; border-radius: 0 32px 0 32px; pointer-events: none; user-select: none; }
+    .form-panel { min-width: 0; padding: clamp(22px, 3.5vw, 42px); border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+    fieldset { min-width: 0; margin: 0; border: 0; padding: 0; }
+    .row { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+    .field { margin-bottom: 20px; min-width: 0; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; }
+    input, textarea { width: 100%; border: 1px solid var(--control); background: #fff; border-radius: 5px; padding: 10px 12px; min-height: 46px; }
+    textarea { min-height: 138px; resize: vertical; display: block; }
+    .field-hint { margin: 7px 0 0; color: var(--muted); font-size: .875rem; }
+    .button { border: 1px solid var(--ink); border-radius: 5px; background: var(--ink); color: white; min-height: 46px; padding: 10px 21px; font-weight: 700; cursor: pointer; }
+    .button:hover { background: #173447; }
+    .button:disabled { opacity: .65; cursor: progress; }
+    .trap, .sr-only, .skip:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .skip:focus { position: fixed; z-index: 2; inset: 8px auto auto 8px; background: white; padding: 10px; }
+    .status:not(:empty) { margin: 0 0 16px; padding: 10px 14px; border-left: 3px solid var(--control); background: #f2f0e8; }
+    .status[data-error="true"] { border-color: var(--error); color: var(--error); }
+    .email-alternative { display: none; margin: 0 0 16px; }
+    .status[data-error="true"] + .email-alternative { display: block; }
+    .complete h2 { font-size: clamp(1.65rem, 3vw, 2.1rem); letter-spacing: -.035em; line-height: 1.15; }
+    .complete p { margin: 12px 0 22px; }
+    @media (max-width: 760px) {
+      .contact-layout { grid-template-columns: 1fr; gap: 20px; }
+      .kitchen-photo { display: none; }
+      .intro p { max-width: 60ch; margin-top: 10px; }
+    }
+    @media (max-width: 600px) {
+      .shell { width: calc(100% - 32px); }
+      .site-header { padding-top: 0; }
+      .brand-banner { width: 100%; }
+      .header-nav { gap: 16px; }
+      .header-nav a { min-height: 46px; }
+      .row { display: block; }
+      .form-panel { padding: 20px 16px; }
+      .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#inquiryName">Skip to inquiry form</a>
+  <header class="site-header">
+    <div class="shell brand-banner"><img src="logo.png" alt="Aruna's Kitchen" width="1244" height="276" fetchpriority="high"></div>
+    <nav class="shell header-nav" aria-label="Primary navigation">
+      <a href="order-form.html#menuHeading">Weekly menu</a>
+      <a href="contact.html" aria-current="page">Contact us</a>
+    </nav>
+  </header>
+  <main class="shell contact-layout">
+    <div class="intro">
+      <h1>Contact us</h1>
+      <p>Have a question about a dish, pickup, delivery, or your order? Send a message to Aruna’s Kitchen. We’ll reply by email.</p>
+      <div class="kitchen-photo" aria-hidden="true"></div>
+    </div>
+    <div class="form-panel">
+      <form id="inquiryForm" method="post">
+        <fieldset id="inquiryFields">
+          <legend class="sr-only">Your inquiry</legend>
+          <div class="row">
+            <div class="field"><label for="inquiryName">Your name</label><input id="inquiryName" name="name" autocomplete="name" maxlength="120" required></div>
+            <div class="field"><label for="inquiryEmail">Email address</label><input id="inquiryEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div>
+          </div>
+          <div class="field"><label for="inquiryMessage">Your message</label><textarea id="inquiryMessage" name="message" maxlength="4000" rows="5" required aria-describedby="messageHint"></textarea><p class="field-hint" id="messageHint">For an existing order, please include your order number if you have it.</p></div>
+          <div class="trap" aria-hidden="true" inert><label for="website">Leave this field empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+        </fieldset>
+        <p class="status" id="inquiryStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+        <p class="email-alternative"><a href="mailto:arunaskitchen990@gmail.com">Email the kitchen directly</a></p>
+        <button class="button" id="sendInquiry" type="submit" disabled>Send message</button>
+        <noscript><p>You can <a href="mailto:arunaskitchen990@gmail.com">email the kitchen directly</a>.</p></noscript>
+      </form>
+      <section class="complete" id="inquiryComplete" aria-labelledby="sentHeading" hidden>
+        <h2 id="sentHeading" tabindex="-1">Message sent</h2>
+        <p id="replyNotice"></p>
+        <button class="button" id="anotherInquiry" type="button">Write another message</button>
+      </section>
+    </div>
+  </main>
+  <script>
+    'use strict';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjZLNgPAxmeQASz73FxF1XlsGKS7bPzdCBDzYVlhtuVmRWisKN1bk88PCaOCkEyRLEPQ/exec';
+    const INQUIRY_STORAGE_KEY = 'aruna-kitchen-inquiry-v1';
+    const byId = id => document.getElementById(id);
+    let pendingInquiry = null;
+    let sending = false;
+
+    function saveInquiry() {
+      try {
+        if (pendingInquiry) sessionStorage.setItem(INQUIRY_STORAGE_KEY, JSON.stringify(pendingInquiry));
+        else sessionStorage.removeItem(INQUIRY_STORAGE_KEY);
+      } catch (_) { /* Retries in this tab still use the in-memory request. */ }
+    }
+
+    function restoreInquiry() {
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(INQUIRY_STORAGE_KEY) || 'null');
+        if (!saved || typeof saved.requestId !== 'string' || !/^[a-zA-Z0-9-]{16,80}$/.test(saved.requestId)) return;
+        if (![saved.name, saved.email, saved.message].every(value => typeof value === 'string' && value.trim())) return;
+        pendingInquiry = saved;
+        byId('inquiryName').value = saved.name;
+        byId('inquiryEmail').value = saved.email;
+        byId('inquiryMessage').value = saved.message;
+        showStatus('Your previous message is awaiting confirmation. Retry the same message below.');
+      } catch (_) { /* A malformed draft is never sent automatically. */ }
+    }
+
+    function showStatus(message, isError = false) {
+      byId('inquiryStatus').textContent = message;
+      byId('inquiryStatus').dataset.error = String(isError);
+    }
+
+    function updateControls() {
+      byId('inquiryFields').disabled = sending || !!pendingInquiry;
+      byId('sendInquiry').disabled = sending;
+      byId('sendInquiry').textContent = sending ? 'Sending…' : pendingInquiry ? 'Retry this message' : 'Send message';
+      byId('inquiryForm').setAttribute('aria-busy', String(sending));
+    }
+
+    function inquiryRequestId() {
+      if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+      return Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function sendInquiry(event) {
+      event.preventDefault();
+      if (sending) return;
+      if (!pendingInquiry) {
+        const name = byId('inquiryName');
+        const message = byId('inquiryMessage');
+        name.value = name.value.trim();
+        message.value = message.value.trim();
+        byId('inquiryEmail').value = byId('inquiryEmail').value.trim();
+        if (!byId('inquiryForm').reportValidity()) return;
+        pendingInquiry = { requestId: inquiryRequestId(), name: name.value, email: byId('inquiryEmail').value, message: message.value, website: byId('website').value };
+        saveInquiry();
+      }
+      sending = true;
+      updateControls();
+      showStatus('Sending your message…');
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 45000);
+      try {
+        const response = await fetch(SCRIPT_URL, {method: 'POST', body: new URLSearchParams({ action: 'submitInquiry', payload: JSON.stringify(pendingInquiry) }), signal: controller.signal});
+        if (!response.ok) throw new Error('Uncertain delivery');
+        const result = await response.json();
+        if (result && result.success === true && !result.error && !result.errorCode && result.inquiryId === pendingInquiry.requestId) {
+          const email = pendingInquiry.email;
+          pendingInquiry = null;
+          saveInquiry();
+          byId('inquiryForm').reset();
+          byId('inquiryForm').hidden = true;
+          byId('replyNotice').textContent = 'Thank you for contacting Aruna’s Kitchen. Our reply will go to ' + email + '.';
+          byId('inquiryComplete').hidden = false;
+          byId('sentHeading').focus();
+        } else if (result && result.success === false && typeof result.error === 'string' && result.error.trim()) {
+          if (result.errorCode === 'INVALID_INQUIRY') {
+            pendingInquiry = null;
+            saveInquiry();
+          }
+          showStatus(result.error, true);
+        } else {
+          throw new Error('Uncertain delivery');
+        }
+      } catch (_) {
+        showStatus('We couldn’t confirm delivery. Retry this same message before sending another.', true);
+      } finally {
+        window.clearTimeout(timer);
+        sending = false;
+        updateControls();
+      }
+    }
+
+    function initializeInquiryForm() {
+      restoreInquiry();
+      updateControls();
+      byId('inquiryForm').addEventListener('submit', sendInquiry);
+      byId('anotherInquiry').addEventListener('click', () => {
+        byId('inquiryComplete').hidden = true;
+        byId('inquiryForm').hidden = false;
+        showStatus('');
+        byId('inquiryName').focus();
+      });
+    }
+    document.addEventListener('DOMContentLoaded', initializeInquiryForm);
+  </script>
+</body>
+</html>
