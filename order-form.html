@@ -7,9 +7,10 @@
   <title>Aruna's Kitchen — Weekly Menu & Orders</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      --font: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
       --background: #FBF1DF; --surface: #fffcf5; --ink: #24465C; --muted: #59666A;
       --brand: #24465C; --brand-dark: #173447; --brand-soft: #e8ebdf;
       --coral: #B84638; --sage: #929E85;
@@ -19,7 +20,7 @@
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: 24px; }
-    body { margin: 0; overflow-x: clip; background: var(--background); color: var(--ink); font: 400 17px/1.5 'Source Sans Pro', sans-serif; }
+    body { margin: 0; overflow-x: clip; background: var(--background); color: var(--ink); font: 400 17px/1.5 var(--font); }
     button, input, select { font: inherit; }
     button, a, input { -webkit-tap-highlight-color: transparent; }
     button { cursor: pointer; }
@@ -33,7 +34,7 @@
     .shell { width: min(1120px, calc(100% - 64px)); margin: 0 auto; }
     main { padding-top: 38px; }
     h1, h2, h3, p { margin-top: 0; }
-    h1, h2 { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; }
+    h1, h2 { font-family: var(--font); font-weight: 600; }
     h1 { margin-bottom: 9px; font-size: clamp(30px, 4vw, 39px); line-height: 1.2; }
     .app-grid { display: grid; grid-template-columns: minmax(0, 1fr) 355px; gap: 26px; align-items: start; }
     .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
@@ -73,7 +74,7 @@
     .cart-section { padding: 22px 23px; }
     .cart-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
     .cart-title h2 { margin: 0; font-size: 24px; }
-    .item-count { font: 600 13px/1.4 'Source Sans Pro', sans-serif; color: var(--muted); }
+    .item-count { font: 600 13px/1.4 var(--font); color: var(--muted); }
     .empty-cart { text-align: center; padding: 21px 8px; color: var(--muted); border: 1px dashed var(--border); border-radius: 11px; font-size: 15px; }
     .empty-cart svg { display: block; margin: 0 auto 11px; color: #a18b72; }
     .cart-day { margin: 19px 0 7px; font-size: 13px; color: var(--brand); font-weight: 700; }
@@ -89,7 +90,7 @@
     .total-line { display: flex; justify-content: space-between; gap: 16px; margin: 6px 0; font-size: 15px; }
     .total-line.grand { font-weight: 700; font-size: 23px; padding-top: 9px; margin-top: 12px; border-top: 1px solid var(--border); }
     .checkout-form { border-top: 1px solid var(--border); padding: 22px 23px; }
-    .checkout-form h2 { margin: 0 0 17px; font: 600 19px/1.3 'Source Sans Pro', sans-serif; }
+    .checkout-form h2 { margin: 0 0 17px; font: 600 19px/1.3 var(--font); }
     fieldset { min-width: 0; margin: 0; border: 0; padding: 0; }
     .field { margin-bottom: 15px; }
     .field label, .fulfillment legend { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
@@ -135,7 +136,7 @@
     .receipt-meta dt { color: var(--muted); font-size: 13px; }
     .receipt-meta dd { margin: 2px 0 0; overflow-wrap: anywhere; }
     .receipt-day { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 17px; }
-    .receipt-day h2 { font: 600 17px/1.3 'Source Sans Pro', sans-serif; margin-bottom: 8px; }
+    .receipt-day h2 { font: 600 17px/1.3 var(--font); margin-bottom: 8px; }
     .receipt-line { display: flex; justify-content: space-between; gap: 20px; margin: 8px 0; font-size: 15px; }
     .receipt-line small { display: block; color: var(--muted); }
     .receipt-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
@@ -168,11 +169,11 @@
     .shell { width: min(1180px, calc(100% - 72px)); }
     .site-header { padding-top: 16px; }
     .brand-banner { display: block; background: #f1dfc2; }
-    #brandLogo { display: block; width: 100%; height: auto; object-fit: contain; color: var(--ink); font: 700 30px/1.4 'Playfair Display', Georgia, serif; text-align: center; }
+    #brandLogo { display: block; width: 100%; height: auto; object-fit: contain; color: var(--ink); font: 700 30px/1.4 var(--font); text-align: center; }
     .header-nav { display: flex; align-items: center; gap: 26px; border-bottom: 1px solid var(--border); }
     .header-nav a { display: inline-flex; min-height: 48px; align-items: center; color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700; }
     .header-nav a:hover { text-decoration: underline; }
-    .header-contact { margin-left: auto; font-variant-numeric: tabular-nums; }
+    .header-contact { margin-left: auto; }
     body.is-confirmed .header-nav a[href^="#"] { display: none; }
     main { padding-top: 24px; }
     .intro { display: grid; grid-template-columns: minmax(210px, .67fr) minmax(0, 1.33fr); align-items: center; gap: clamp(18px, 3vw, 42px); }
@@ -202,7 +203,7 @@
     .day-tab[aria-selected="true"] .day-state { color: var(--ink); }
     .day-tab.is-closed:not([aria-selected="true"]) { background: #f2ecdf; color: #5a6965; }
     .menu-day-heading { background: transparent; padding: 16px 0; border-top: 1px dotted var(--sage); border-bottom: 1px dotted var(--sage); }
-    .menu-day-heading h3 { font: 600 23px/1.2 'Playfair Display', Georgia, serif; }
+    .menu-day-heading h3 { font: 600 23px/1.2 var(--font); }
     .menu-day-heading p { color: var(--muted); font-size: 14px; }
     .day-label { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
     .menu-item { margin: 0; padding: 23px 0; border-bottom: 1px dotted var(--sage); }
@@ -275,6 +276,7 @@
 </head>
 <body>
   <a class="skip-link" href="#menuHeading">Skip to menu</a>
+  <span id="contactTabHint" class="sr-only">Opens in a new tab so you can keep your order here.</span>
   <header class="site-header">
     <div class="shell brand-banner">
       <img id="brandLogo" src="https://somanad10.github.io/Kitchen-Orders/logo.png" alt="Aruna's Kitchen" width="1244" height="276" fetchpriority="high">
@@ -282,7 +284,7 @@
     <nav class="shell header-nav" aria-label="Primary navigation">
       <a href="#menuHeading">Weekly menu</a>
       <a href="#checkout">Your order</a>
-      <a class="header-contact" href="tel:+12488779924">+1 248-877-9924</a>
+      <a class="header-contact" href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint">Contact us</a>
     </nav>
   </header>
 
@@ -295,9 +297,9 @@
       <div class="cutoff" id="cutoffNotice"><span id="cutoffText">Order by 10 PM Central for the next day. Pickup or $2 delivery per day.</span></div>
     </div>
     <div id="globalNotice" class="notice error" role="alert" tabindex="-1" hidden></div>
-    <div id="pendingNotice" class="notice pending" role="status" hidden><p id="pendingMessage"></p><div class="notice-actions"><button type="button" class="button button-primary" id="retryOrder">Retry the same order</button><a href="tel:+12488779924" class="button button-secondary">Call the kitchen</a></div></div>
+    <div id="pendingNotice" class="notice pending" role="status" hidden><p id="pendingMessage"></p><div class="notice-actions"><button type="button" class="button button-primary" id="retryOrder">Retry the same order</button><a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint" class="button button-secondary">Contact us</a></div></div>
     <div id="loadingState" class="panel load-state" role="status"><span class="spinner" aria-hidden="true"></span><p>Loading this week's menu…</p></div>
-    <div id="menuLoadError" class="panel load-state" hidden><h2>Our menu isn't available right now.</h2><p id="menuLoadMessage">Please try again in a moment, or call the kitchen.</p><button type="button" class="button button-primary" id="reloadMenu">Try again</button> <a href="tel:+12488779924" class="button button-secondary">Call the kitchen</a></div>
+    <div id="menuLoadError" class="panel load-state" hidden><h2>Our menu isn't available right now.</h2><p id="menuLoadMessage">Please try again in a moment or send us a message.</p><button type="button" class="button button-primary" id="reloadMenu">Try again</button> <a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint" class="button button-secondary">Contact us</a></div>
 
     <div class="app-grid" id="shop" hidden>
       <section class="panel menu-panel" aria-labelledby="menuHeading">
@@ -305,7 +307,7 @@
         <div class="day-tabs" id="dayTabs" role="tablist" aria-label="Menu day"></div>
         <div id="menuPanel" role="tabpanel" tabindex="0"><div class="menu-day-heading"><div><h3 id="dayHeading"></h3><p id="dayDescription"></p></div><span class="day-label" id="dayStatus"></span></div><div id="menuItems"></div></div>
         <div class="menu-footer">
-          <p>Food allergies or dietary restrictions? <a href="tel:+12488779924">Please call us before ordering.</a></p>
+          <p>Food allergies or dietary restrictions? <a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint">Contact us before ordering.</a></p>
           <div class="food-scene" aria-hidden="true"><span class="crab"></span><span class="crimson"></span></div>
         </div>
       </section>
@@ -316,7 +318,7 @@
           <h2>Your details</h2>
           <fieldset id="customerFields"><legend class="sr-only">Contact and fulfillment details</legend>
             <div class="field"><label for="customerName">Name</label><input id="customerName" name="name" autocomplete="name" required maxlength="120" placeholder="Your full name"><p class="field-error" id="customerNameError" hidden></p></div>
-            <div class="field"><label for="customerPhone">Phone number</label><input id="customerPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" required maxlength="20" placeholder="(555) 123-4567"><p class="field-error" id="customerPhoneError" hidden></p></div>
+            <div class="field"><label for="customerPhone">Phone number</label><input id="customerPhone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" required maxlength="20" placeholder="Your mobile number"><p class="field-error" id="customerPhoneError" hidden></p></div>
             <div class="field"><label for="customerEmail">Email <span class="optional">(optional)</span></label><input id="customerEmail" name="email" type="email" autocomplete="email" maxlength="254" placeholder="For your order confirmation" aria-describedby="emailHint"><p class="field-hint" id="emailHint">We'll email a receipt if you provide one.</p><p class="field-error" id="customerEmailError" hidden></p></div>
             <fieldset class="fulfillment"><legend>How would you like your order?</legend><div class="fulfillment-options"><label class="method"><input type="radio" name="fulfillment" value="Pickup" checked><span>Pickup<small>No delivery fee</small></span></label><label class="method"><input type="radio" name="fulfillment" value="Delivery"><span>Delivery<small>$2 per day</small></span></label></div></fieldset>
             <div class="field" id="addressField" hidden><label for="deliveryAddress">Delivery address</label><input id="deliveryAddress" name="deliveryAddress" autocomplete="street-address" maxlength="500" placeholder="Street, city, state and ZIP" disabled><p class="field-error" id="deliveryAddressError" hidden></p></div>
@@ -329,7 +331,7 @@
     <section id="confirmation" class="panel confirmation" aria-labelledby="confirmationHeading" hidden></section>
     <p class="sr-only" id="cartAnnouncement" role="status" aria-live="polite" aria-atomic="true"></p>
   </main>
-  <footer class="shell site-footer"><div class="footer-top"><span>Aruna's Kitchen · Freshly cooked, homestyle flavors</span><a href="tel:+12488779924">+1 248-877-9924</a></div><details><summary>Ordering information & policies</summary><ul><li>All orders are subject to availability and must be placed by 10 PM Central for next-day fulfillment.</li><li>Prices and menu items may change without notice.</li><li>Delivery times are estimates and may vary based on location and order volume.</li><li>Please inform us of any food allergies or dietary restrictions when placing your order.</li><li>We reserve the right to cancel or modify orders in case of unforeseen circumstances.</li><li>Payment terms and cancellation policies apply. Please contact us for details.</li><li>By placing an order, you agree to our terms of service and privacy policy.</li></ul></details></footer>
+  <footer class="shell site-footer"><div class="footer-top"><span>Aruna's Kitchen · Freshly cooked, homestyle flavors</span><a href="contact.html" target="_blank" rel="noopener" aria-describedby="contactTabHint">Contact us</a></div><details><summary>Ordering information & policies</summary><ul><li>All orders are subject to availability and must be placed by 10 PM Central for next-day fulfillment.</li><li>Prices and menu items may change without notice.</li><li>Delivery times are estimates and may vary based on location and order volume.</li><li>Please inform us of any food allergies or dietary restrictions when placing your order.</li><li>We reserve the right to cancel or modify orders in case of unforeseen circumstances.</li><li>Payment terms and cancellation policies apply. Please contact us for details.</li><li>By placing an order, you agree to our terms of service and privacy policy.</li></ul></details></footer>
   <div class="mobile-cart" id="mobileCart" hidden><div><span id="mobileCartCount"></span><strong id="mobileCartTotal"></strong></div><button type="button" class="button button-primary" id="reviewOrder">Review order <span aria-hidden="true">→</span></button></div>
 
   <script>
@@ -586,7 +588,7 @@
       byId('customerFields').disabled = !!state.pending;
       byId('deliveryAddress').disabled = state.fulfillment !== 'Delivery' || !!state.pending;
       byId('pendingNotice').hidden = !state.pending || state.submitting;
-      byId('pendingMessage').textContent = message || 'We could not confirm the result of your submission. Retry the same order safely, or call the kitchen before starting another order.';
+      byId('pendingMessage').textContent = message || 'We could not confirm the result of your submission. Retry the same order safely, or contact us before starting another order.';
       byId('retryOrder').disabled = state.submitting;
       byId('orderForm').setAttribute('aria-busy', String(state.submitting));
       if (state.submitting) byId('cartAnnouncement').textContent = 'Confirming your order. Please wait.';
@@ -628,11 +630,11 @@
             if (['MENU_CHANGED', 'ORDER_CLOSED'].includes(result.errorCode)) await loadMenu(true, rejected.orderLines.map(line => ({ ...line, cents: Math.round(line.unitPrice * 100) })), rejected.weekLabel);
           } else {
             if (result.orderId) state.pending.reference = result.orderId;
-            uncertainMessage = `${result.error} Retry this same order to check it, or call the kitchen${result.orderId ? ' with your reference' : ''}.`;
+            uncertainMessage = `${result.error} Retry this same order to check it, or contact us${result.orderId ? ' with your reference' : ''}.`;
           }
         } else throw new Error('Unrecognized response');
       } catch (_) {
-        uncertainMessage = 'We could not confirm whether your order was received. Retry this same order before placing another, or call the kitchen.';
+        uncertainMessage = 'We could not confirm whether your order was received. Retry this same order before placing another, or contact us.';
       } finally {
         state.submitting = false;
         rememberPending();
@@ -706,10 +708,13 @@
       const again = element('button', 'Place another order', 'button button-primary'); again.type = 'button'; again.addEventListener('click', () => window.location.reload());
       actions.append(print);
       if (!cancelled) actions.append(again);
-      else { const call = element('a', 'Call the kitchen', 'button button-primary'); call.href = 'tel:+12488779924'; actions.append(call); }
+      const contactLink = element('a', 'Contact us', cancelled ? 'button button-primary' : 'button button-secondary');
+      contactLink.href = 'contact.html';
+      contactLink.target = '_blank';
+      contactLink.rel = 'noopener';
+      contactLink.setAttribute('aria-describedby', 'contactTabHint');
+      actions.append(contactLink);
       receipt.append(actions);
-      const contact = element('p', 'Questions? ', 'field-hint');
-      const phone = element('a', '+1 248-877-9924'); phone.href = 'tel:+12488779924'; contact.append(phone); receipt.append(contact);
       receipt.hidden = false;
       byId('mobileCart').hidden = true;
       document.body.classList.remove('has-cart');
